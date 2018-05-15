@@ -19,6 +19,9 @@ public class Board : MonoBehaviour {
 	{
 		IDLE,
 		TRANSFORMING,
+		SELECT,
+		MOVE,
+		BRAKE,
 		DONE
 	}
 
@@ -53,7 +56,13 @@ public class Board : MonoBehaviour {
 		lastRotation = selectedShape.transform.localEulerAngles;
 
 		Vector3 rot = selectedShape.transform.localEulerAngles;
-		rot.y += qty;
+		if (qty < 0 && (lastRotation.y < 1f || lastRotation.y > 359f)) {
+			rot = new Vector3 (lastRotation.x, 359f, lastRotation.z);
+			selectedShape.transform.localEulerAngles = rot;
+			rot.y += qty+1;
+		} else {
+			rot.y += qty;
+		}
 		newRotation = rot;
 		Invoke ("Done", 0.5f);
 	}
@@ -84,6 +93,21 @@ public class Board : MonoBehaviour {
 		if (state == states.TRANSFORMING) {			
 			selectedShape.transform.localEulerAngles = Vector3.Lerp (selectedShape.transform.localEulerAngles, newRotation, 0.25f);
 			selectedShape.transform.localPosition = Vector3.Lerp (selectedShape.transform.localPosition, newPosition, 0.25f);
+		} else if (state == states.SELECT) {
+			if (Input.GetMouseButtonDown (0)) {
+				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+				RaycastHit hit;
+
+				if (Physics.Raycast (ray, out hit)) {
+					if (hit.transform.tag == "Shape") {
+						selectedShape = hit.transform.gameObject.GetComponent<ShapeAsset>();
+						lastPosition = selectedShape.transform.localPosition;
+						lastRotation = selectedShape.transform.localEulerAngles;
+					} else {
+						Debug.Log (hit.transform.name);                
+					}
+				}
+			}
 		}
 	}
 	void Done()

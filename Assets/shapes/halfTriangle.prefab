@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 114868386161038234}
   m_Layer: 0
   m_Name: halfTriangle
-  m_TagString: Untagged
+  m_TagString: Shape
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -124,3 +124,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: {x: 1, y: 2, z: 2}
+  childs: []
