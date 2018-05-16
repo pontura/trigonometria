@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SelectShape : MonoBehaviour {
+public class InputManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -11,17 +11,17 @@ public class SelectShape : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+	
+		//Mousse Button
 		if (Input.GetMouseButtonDown (0)) {
 			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit;
 
 			if (Physics.Raycast (ray, out hit)) {
-				if (hit.transform.name == "Player") {
-					Debug.Log ("This is a Player");
-				} else {
-					Debug.Log ("This isn't a Player");                
-				}
+				Events.OnMouseCollide (hit.transform.gameObject);
 			}
 		}
 	}
+	
+
 }

@@ -19,10 +19,16 @@ public class Board : MonoBehaviour {
 	{
 		IDLE,
 		TRANSFORMING,
-		SELECT,
-		MOVE,
-		BRAKE,
 		DONE
+	}
+
+	// Use this for initialization
+	void Start () {
+		Events.OnMouseCollide += SelectShape;
+	}
+
+	void OnDestroy(){
+		Events.OnMouseCollide -= SelectShape;
 	}
 
 	public void AddNewShape(int id)
@@ -93,21 +99,6 @@ public class Board : MonoBehaviour {
 		if (state == states.TRANSFORMING) {			
 			selectedShape.transform.localEulerAngles = Vector3.Lerp (selectedShape.transform.localEulerAngles, newRotation, 0.25f);
 			selectedShape.transform.localPosition = Vector3.Lerp (selectedShape.transform.localPosition, newPosition, 0.25f);
-		} else if (state == states.SELECT) {
-			if (Input.GetMouseButtonDown (0)) {
-				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-				RaycastHit hit;
-
-				if (Physics.Raycast (ray, out hit)) {
-					if (hit.transform.tag == "Shape") {
-						selectedShape = hit.transform.gameObject.GetComponent<ShapeAsset>();
-						lastPosition = selectedShape.transform.localPosition;
-						lastRotation = selectedShape.transform.localEulerAngles;
-					} else {
-						Debug.Log (hit.transform.name);                
-					}
-				}
-			}
 		}
 	}
 	void Done()
@@ -115,5 +106,14 @@ public class Board : MonoBehaviour {
 		state = states.DONE;
 		selectedShape.transform.localEulerAngles = newRotation;
 		selectedShape.transform.localPosition = newPosition;
+	}
+
+	void SelectShape(GameObject go){
+		ShapeCollider sc = go.GetComponent<ShapeCollider> ();
+		if (sc != null) {
+			selectedShape = sc.shapeAsset;
+			Debug.Log (selectedShape.transform.name + ": " + selectedShape.transform.GetInstanceID ());
+		}
+
 	}
 }
