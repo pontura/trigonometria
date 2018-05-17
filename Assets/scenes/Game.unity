@@ -3871,8 +3871,8 @@ MonoBehaviour:
   selectedShape: {fileID: 0}
   shapesContainer: {fileID: 1222995731}
   all: []
-  lastRotation: {x: 0, y: 0, z: 0}
-  lastPosition: {x: 0, y: 0, z: 0}
+  total_Vol_done: 0
+  total_Vol_inside: 0
   CameraRot: {x: 0, y: 0, z: 0}
   state: 0
 --- !u!114 &2009075061
