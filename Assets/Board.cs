@@ -8,8 +8,8 @@ public class Board : MonoBehaviour {
 	public Transform shapesContainer;
 	public List<ShapeAsset> all;
 
-	Vector3 lastRotation;
-	Vector3 lastPosition;
+	public Vector3 lastRotation;
+	public Vector3 lastPosition;
 
 	Vector3 newRotation;
 	Vector3 newPosition;
@@ -36,8 +36,22 @@ public class Board : MonoBehaviour {
 	void OnDestroy(){
 		Events.OnMouseCollide -= SelectShape;
 	}
-
+	public void AddNewShape(int id, Vector3 pos, Vector3 rot)
+	{		
+		SelectNewShape (id);
+		selectedShape.transform.localPosition = pos;
+		selectedShape.transform.localEulerAngles = rot;
+		NewShapeAdded ();
+		unmoved = false;
+	}
 	public void AddNewShape(int id)
+	{
+		SelectNewShape (id);
+		selectedShape.transform.localPosition = GetEmptySpace();		
+		NewShapeAdded ();
+		unmoved = true;
+	}
+	void SelectNewShape(int id)
 	{
 		ShapesData shapeData = Game.Instance.shapesManager.GetByID (id);
 		ShapeAsset shapeAsset = Instantiate(shapeData.asset);
@@ -48,11 +62,11 @@ public class Board : MonoBehaviour {
 
 		all.Add (shapeAsset);
 		selectedShape = shapeAsset;
-		shapeAsset.transform.localPosition = GetEmptySpace();
-		lastPosition = shapeAsset.transform.localPosition;
-		lastRotation = Vector3.zero;
-		unmoved = true;
-
+	}
+	void NewShapeAdded()
+	{
+		newPosition = selectedShape.transform.localPosition;
+		newRotation = selectedShape.transform.localEulerAngles;
 	}
 	Vector3 GetEmptySpace()
 	{
@@ -70,6 +84,7 @@ public class Board : MonoBehaviour {
 
 	public void Rotate(int qty)
 	{
+		print ("ROTA");
 		if (state == states.TRANSFORMING)
 			return;
 
@@ -135,21 +150,34 @@ public class Board : MonoBehaviour {
 	}
 
 	void SelectShape(GameObject go){
-		//ShapeCollider sc = go.GetComponent<ShapeCollider> ();
 		ShapeAsset sa = go.GetComponentInParent<ShapeAsset> ();
 		if (sa != null) {
-			//selectedShape = sc.shapeAsset;
 			selectedShape = sa;
-			//Debug.Log (selectedShape.transform.name + ": " + selectedShape.transform.GetInstanceID ());
+			newRotation = sa.transform.localEulerAngles;
+			newPosition = sa.transform.localPosition;
 		}
 	}
 
-	public void DestroySelected(){
+	public void DestroyShape(){
 		all.Remove (selectedShape);
 		Destroy (selectedShape.gameObject);
 	}
 
-	public void Break(){
+	public void BreakShape(){
+		List<GameObject> childs = new List<GameObject>();
+		int childID = 0;
+		foreach (ShapeAsset.ChildData childData in selectedShape.childs) {
+			childData.child.transform.SetParent (shapesContainer);
+			childs.Add (childData.child);
+			childID = childData.id;
+		}
+		all.Remove (selectedShape);
+		Destroy (selectedShape.gameObject);
 
+		foreach (GameObject go in childs) {
+			AddNewShape (childID, go.transform.localPosition, go.transform.localEulerAngles);
+		}
+		foreach (GameObject t in childs)
+			Destroy (t);
 	}
 }
