@@ -112,7 +112,7 @@ public class Board : MonoBehaviour {
 		ShapeCollider sc = go.GetComponent<ShapeCollider> ();
 		if (sc != null) {
 			selectedShape = sc.shapeAsset;
-			Debug.Log (selectedShape.transform.name + ": " + selectedShape.transform.GetInstanceID ());
+			//Debug.Log (selectedShape.transform.name + ": " + selectedShape.transform.GetInstanceID ());
 		}
 
 	}
