@@ -3867,6 +3867,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20575b6b2d0a94b42ab6a2f841b16342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetShape: {fileID: 960548213}
   selectedShape: {fileID: 0}
   shapesContainer: {fileID: 1222995731}
   all: []
@@ -4022,6 +4023,8 @@ MonoBehaviour:
   zoomIn: 3.22
   zoomOut: 8
   cameraPivot: {fileID: 1202724164}
+  newRot: 0
+  state: 0
 --- !u!1 &2028416104
 GameObject:
   m_ObjectHideFlags: 0
