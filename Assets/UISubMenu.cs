@@ -47,13 +47,6 @@ public class UISubMenu : MonoBehaviour {
 			Game.Instance.board.Rotate (-90);
 			rotateButton.Select();
 			break;
-		case UIButton.types.BREAK:
-			Game.Instance.board.Rotate (-90);
-			rotateButton.Select();
-			break;
-		case UIButton.types.DESTROY:
-			Game.Instance.board.DestroySelected ();
-			break;
 		}
 	}
 	public void SetOff()

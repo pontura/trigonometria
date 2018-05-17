@@ -61,10 +61,12 @@ public class UIMenu : MonoBehaviour {
 	}
 	public void Break()
 	{
+		Game.Instance.board.BreakShape ();
 		submenu.SetOff();
 	}
 	public void DestroyShape()
 	{
+		Game.Instance.board.DestroyShape ();
 		submenu.SetOff();
 	}
 	bool up = true;
