@@ -20,6 +20,8 @@ public class Board : MonoBehaviour {
 	int empty_size = 3;
 	int empty_offset = -2;
 
+	public Vector3 CameraRot;
+
 	public states state;
 	public enum states
 	{

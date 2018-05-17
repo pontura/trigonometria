@@ -86,6 +86,6 @@ public class UIMenu : MonoBehaviour {
 	}
 	void RotateCamera()
 	{
-		
+		Events.OnCameraRotate ();
 	}
 }

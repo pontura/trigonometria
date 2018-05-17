@@ -19,7 +19,11 @@ public class UISubMenu : MonoBehaviour {
 	{
 		switch (uiButton.type) {
 		case UIButton.types.MOVE_X_IN:
-			Game.Instance.board.Move (new Vector3 (1, 0, 0));
+			if(Game.Instance.board.CameraRot==Vector3.zero)
+				Game.Instance.board.Move (new Vector3 (1, 0, 0));
+			else
+				Game.Instance.board.Move (new Vector3 (1, 0, 0));
+			//Game.Instance.board.Move (Vector3.Cross(new Vector3 (1, 0, 0),Game.Instance.board.CameraRot.normalized));
 			translateButton.Select();
 			break;
 		case UIButton.types.MOVE_X_OUT:
