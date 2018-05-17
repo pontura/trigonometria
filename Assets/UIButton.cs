@@ -26,9 +26,14 @@ public class UIButton : MonoBehaviour  {
 	}
 	void Start()
 	{
+		Events.OnShapeSelected += OnShapeSelected;
 		GetComponent<Button>().onClick.AddListener(TaskOnClick);
 	}
-
+	void OnShapeSelected(ShapeAsset sa)
+	{
+		foreach (Text t in GetComponentsInChildren<Text>())
+			t.color = sa.color;
+	}
 	void TaskOnClick()
 	{
 		Events.OnButtonClickd (this);

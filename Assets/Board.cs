@@ -67,6 +67,7 @@ public class Board : MonoBehaviour {
 	{
 		newPosition = selectedShape.transform.localPosition;
 		newRotation = selectedShape.transform.localEulerAngles;
+		Events.OnShapeSelected (selectedShape);
 	}
 	Vector3 GetEmptySpace()
 	{
@@ -152,6 +153,7 @@ public class Board : MonoBehaviour {
 	void SelectShape(GameObject go){
 		ShapeAsset sa = go.GetComponentInParent<ShapeAsset> ();
 		if (sa != null) {
+			Events.OnShapeSelected (sa);
 			selectedShape = sa;
 			newRotation = sa.transform.localEulerAngles;
 			newPosition = sa.transform.localPosition;
