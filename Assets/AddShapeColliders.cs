@@ -40,5 +40,7 @@ public class AddShapeColliders : MonoBehaviour {
 
 		go.GetComponent<Collider> ().isTrigger = true;
 
+		go.GetComponent<MeshRenderer> ().enabled = false;
+
 	}
 }

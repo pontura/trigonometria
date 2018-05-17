@@ -39,6 +39,7 @@ public class Board : MonoBehaviour {
 		shapeAsset.transform.SetParent (shapesContainer);
 		shapeAsset.transform.localScale = Vector3.one;
 		shapeAsset.transform.localPosition = GetEmptySpace(shapeData);
+		shapeAsset.SetColor(Game.Instance.shapesManager.GetFreeColor (all));
 
 		all.Add (shapeAsset);
 		selectedShape = shapeAsset;
@@ -109,9 +110,11 @@ public class Board : MonoBehaviour {
 	}
 
 	void SelectShape(GameObject go){
-		ShapeCollider sc = go.GetComponent<ShapeCollider> ();
-		if (sc != null) {
-			selectedShape = sc.shapeAsset;
+		//ShapeCollider sc = go.GetComponent<ShapeCollider> ();
+		ShapeAsset sa = go.GetComponentInParent<ShapeAsset> ();
+		if (sa != null) {
+			//selectedShape = sc.shapeAsset;
+			selectedShape = sa;
 			//Debug.Log (selectedShape.transform.name + ": " + selectedShape.transform.GetInstanceID ());
 		}
 

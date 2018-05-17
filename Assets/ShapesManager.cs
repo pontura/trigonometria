@@ -14,4 +14,19 @@ public class ShapesManager : MonoBehaviour {
 				return data;
 		return null;
 	}
+
+	public Color GetFreeColor(List<ShapeAsset> shapes){
+		for (int i = 0; i < colors.Count; i++) {
+			bool used=false;
+			for (int j = 0; j < shapes.Count; j++) {				
+				if (colors [i] == shapes [j].color) {
+					j = shapes.Count;
+					used = true;
+				}
+			}
+			if (!used)
+				return colors [i];
+		}
+		return colors [shapes.Count % colors.Count];
+	}
 }
