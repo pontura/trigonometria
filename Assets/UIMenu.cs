@@ -43,6 +43,12 @@ public class UIMenu : MonoBehaviour {
 		case UIButton.types.DESTROY:
 			DestroyShape();
 			break;
+		case UIButton.types.ZOOM:
+			Zoom();
+			break;
+		case UIButton.types.ROTATE_CAMERA:
+			RotateCamera();
+			break;
 		}
 	}
 	public void Move()
@@ -60,5 +66,26 @@ public class UIMenu : MonoBehaviour {
 	public void DestroyShape()
 	{
 		submenu.SetOff();
+	}
+	bool up = true;
+	float zoomvalue = 2;
+	void Zoom()
+	{
+		if (zoomvalue == 1 && up)
+			zoomvalue = 2;
+		else if (zoomvalue == 2 && up) {
+			zoomvalue = 3;
+			up = false;
+		} else if (zoomvalue == 3 && !up)
+			zoomvalue = 2;
+		else if (zoomvalue == 2 && !up) {
+			zoomvalue = 1;
+			up = true;
+		}
+		Events.OnZoom (zoomvalue);
+	}
+	void RotateCamera()
+	{
+		
 	}
 }
