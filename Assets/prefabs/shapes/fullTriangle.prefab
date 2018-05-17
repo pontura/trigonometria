@@ -57,6 +57,7 @@ GameObject:
   - component: {fileID: 23503522675253262}
   - component: {fileID: 64257123846486050}
   - component: {fileID: 54843052181623262}
+  - component: {fileID: 114939085271763078}
   m_Layer: 0
   m_Name: halfTriangle (1)
   m_TagString: Untagged
@@ -93,6 +94,7 @@ GameObject:
   - component: {fileID: 23986348267022328}
   - component: {fileID: 64204073807436204}
   - component: {fileID: 54032871580379826}
+  - component: {fileID: 114705048764624314}
   m_Layer: 0
   m_Name: halfTriangle (2)
   m_TagString: Untagged
@@ -132,7 +134,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1814697704022732}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -425,3 +427,27 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 180, y: 180, z: 180}
   color: {r: 0, g: 0, b: 0, a: 0}
+--- !u!114 &114705048764624314
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1815202333559992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f232586d073b6b40a6926110fa40307, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shapeAsset: {fileID: 0}
+--- !u!114 &114939085271763078
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1745207360963234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f232586d073b6b40a6926110fa40307, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shapeAsset: {fileID: 0}

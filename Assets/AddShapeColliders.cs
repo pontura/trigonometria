@@ -36,7 +36,7 @@ public class AddShapeColliders : MonoBehaviour {
 		rb.isKinematic = true;
 		rb.useGravity = false;
 
-		go.AddComponent<ShapeCollider> ();
+		//go.AddComponent<ShapeCollider> ();
 
 		go.GetComponent<Collider> ().isTrigger = true;
 

@@ -14,6 +14,12 @@ public class Board : MonoBehaviour {
 	Vector3 newRotation;
 	Vector3 newPosition;
 
+	bool unmoved;
+
+	int empty_id;
+	int empty_size = 3;
+	int empty_offset = -2;
+
 	public states state;
 	public enum states
 	{
@@ -38,26 +44,37 @@ public class Board : MonoBehaviour {
 
 		shapeAsset.transform.SetParent (shapesContainer);
 		shapeAsset.transform.localScale = Vector3.one;
-		shapeAsset.transform.localPosition = GetEmptySpace(shapeData);
 		shapeAsset.SetColor(Game.Instance.shapesManager.GetFreeColor (all));
 
 		all.Add (shapeAsset);
 		selectedShape = shapeAsset;
+		shapeAsset.transform.localPosition = GetEmptySpace();
 		lastPosition = shapeAsset.transform.localPosition;
 		lastRotation = Vector3.zero;
+		unmoved = true;
+
 	}
-	Vector3 GetEmptySpace(ShapesData shapeData)
+	Vector3 GetEmptySpace()
 	{
-		Vector3 emptySpace = Vector3.zero;
-		foreach (ShapeAsset asset in all) {
-			emptySpace.x += asset.size.x;
-		}
-		return emptySpace;
+		if (all.Count == 1)
+			return Vector3.zero;
+		int z = (int) Mathf.Floor (empty_id / empty_size);
+		z = (int)selectedShape.size.z * z;
+		z += empty_offset;
+		int x =empty_id % empty_size;
+		x = (int)selectedShape.size.x * x;
+		x += empty_offset;
+		empty_id = (empty_id + 1) > (empty_size * empty_size) - 1 ? 0 : empty_id + 1;
+		return new Vector3 (x, 0, z);
 	}
+
 	public void Rotate(int qty)
 	{
 		if (state == states.TRANSFORMING)
 			return;
+
+		if (unmoved)
+			unmoved = false;
 		
 		state = states.TRANSFORMING;
 		lastRotation = selectedShape.transform.localEulerAngles;
@@ -79,6 +96,9 @@ public class Board : MonoBehaviour {
 		if (state == states.TRANSFORMING)
 			return;
 
+		if (unmoved)
+			unmoved = false;
+
 		state = states.TRANSFORMING;
 		lastPosition = selectedShape.transform.localPosition;
 
@@ -91,8 +111,13 @@ public class Board : MonoBehaviour {
 	{
 		state = states.DONE;
 		CancelInvoke ();
-		selectedShape.transform.localEulerAngles = lastRotation;
-		selectedShape.transform.localPosition = lastPosition;
+		if(unmoved){
+			selectedShape.transform.localPosition = GetEmptySpace();
+			lastPosition = selectedShape.transform.localPosition;
+		}else{
+			selectedShape.transform.localEulerAngles = lastRotation;
+			selectedShape.transform.localPosition = lastPosition;
+		}
 
 	}
 	void Update()
@@ -117,6 +142,14 @@ public class Board : MonoBehaviour {
 			selectedShape = sa;
 			//Debug.Log (selectedShape.transform.name + ": " + selectedShape.transform.GetInstanceID ());
 		}
+	}
+
+	public void DestroySelected(){
+		all.Remove (selectedShape);
+		Destroy (selectedShape.gameObject);
+	}
+
+	public void Break(){
 
 	}
 }
