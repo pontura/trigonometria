@@ -7,6 +7,7 @@ public class UIButton : MonoBehaviour  {
 
 	public types type;
 	public int id;
+	public Image[] toColirize;
 
 	public enum types
 	{
@@ -31,7 +32,7 @@ public class UIButton : MonoBehaviour  {
 	}
 	void OnShapeSelected(ShapeAsset sa)
 	{
-		foreach (Text t in GetComponentsInChildren<Text>())
+		foreach (Image t in toColirize)
 			t.color = sa.color;
 	}
 	void TaskOnClick()
