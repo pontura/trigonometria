@@ -9,4 +9,6 @@ public static class Events {
 	public static System.Action<ShapeAsset> OnShapeSelected = delegate { };
 	public static System.Action<float> OnZoom = delegate { };
 	public static System.Action OnCameraRotate = delegate { };
+
+	public static System.Action<string> OnMessageShow = delegate { };
 }

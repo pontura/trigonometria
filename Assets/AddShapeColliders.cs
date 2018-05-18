@@ -32,11 +32,13 @@ public class AddShapeColliders : MonoBehaviour {
 	}
 
 	void AddColliderComponents(GameObject go){
+		go.tag = "vertexCollider";
 		Rigidbody rb =  go.AddComponent<Rigidbody> ();
 		rb.isKinematic = true;
 		rb.useGravity = false;
 
 		//go.AddComponent<ShapeCollider> ();
+		go.AddComponent<OnVertexCollide>();
 
 		go.GetComponent<Collider> ().isTrigger = true;
 

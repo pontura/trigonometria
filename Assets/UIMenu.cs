@@ -7,13 +7,19 @@ public class UIMenu : MonoBehaviour {
 
 	UISubMenu submenu;
 	public GameObject buttonsContainer;
+	public Text message;
 	bool isOn;
 
 	void Start () {
 		SetOff ();
 		submenu = GetComponent<UISubMenu> ();
 		Events.OnButtonClickd += OnButtonClickd;
-	}	
+		Events.OnMessageShow += ShowMessage;
+	}
+	void OnDestroy(){
+		Events.OnButtonClickd -= OnButtonClickd;
+		Events.OnMessageShow -= ShowMessage;
+	}
 	public void SetOff()
 	{
 		isOn = false;
@@ -89,5 +95,14 @@ public class UIMenu : MonoBehaviour {
 	void RotateCamera()
 	{
 		Events.OnCameraRotate ();
+	}
+
+	void ShowMessage(string s){
+		message.text = s;
+		Invoke ("CleanMessage", 3);
+	}
+
+	void CleanMessage(){
+		message.text = "";
 	}
 }

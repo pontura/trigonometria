@@ -225,7 +225,21 @@ public class Board : MonoBehaviour {
 		else
 			total_Vol_done = true;
 
-		//total_Vol_inside = areInside;
+		GameObject[] v = GameObject.FindGameObjectsWithTag ("vertexCollider");
+		if (v.Length > 0) {
+			bool areInside = true;
+			for (int i = 0; i < v.Length; i++) {
+				areInside = v [i].GetComponent<OnVertexCollide> ().isInsideTarget;
+				if (!areInside) {
+					i = v.Length;
+				}
+			}
+			total_Vol_inside = areInside;
+		}
+
+
+		if (total_Vol_done && total_Vol_inside)
+			Events.OnMessageShow ("¡Buen trabajo!");
 		//Debug.Log (targetVol + " = " + totalvol);
 		//Debug.Log (System.Math.Round (targetVol*100,6) + " = " + System.Math.Round (totalvol*100,6));
 	}
