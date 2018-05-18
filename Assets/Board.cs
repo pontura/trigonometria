@@ -172,6 +172,7 @@ public class Board : MonoBehaviour {
 	public void DestroyShape(){
 		all.Remove (selectedShape);
 		Destroy (selectedShape.gameObject);
+		CheckIntegration ();
 	}
 
 	public void BreakShape(){
@@ -223,7 +224,7 @@ public class Board : MonoBehaviour {
 		if (System.Math.Round (targetVol*100, 6) == System.Math.Round (totalvol*100, 6))
 			total_Vol_done = true;
 		else
-			total_Vol_done = true;
+			total_Vol_done = false;
 
 		GameObject[] v = GameObject.FindGameObjectsWithTag ("vertexCollider");
 		if (v.Length > 0) {
@@ -240,6 +241,7 @@ public class Board : MonoBehaviour {
 
 		if (total_Vol_done && total_Vol_inside)
 			Events.OnMessageShow ("¡Buen trabajo!");
+
 		//Debug.Log (targetVol + " = " + totalvol);
 		//Debug.Log (System.Math.Round (targetVol*100,6) + " = " + System.Math.Round (totalvol*100,6));
 	}
