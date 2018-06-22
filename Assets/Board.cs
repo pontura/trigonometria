@@ -8,6 +8,7 @@ public class Board : MonoBehaviour {
 	public ShapeAsset selectedShape;
 	public Transform shapesContainer;
 	public List<ShapeAsset> all;
+	public GameObject floor;
 
 	public bool total_Vol_done;
 	public bool total_Vol_inside;
@@ -17,9 +18,15 @@ public class Board : MonoBehaviour {
 	Vector3 lastPosition;
 
 	Vector3 newRotation;
-	Vector3 newPosition;
+	public Vector3 newPosition;
+
+	public Vector3 mousePos;
+	public Vector3 offset;
+	public float offsetFloor;
 
 	bool unmoved;
+	bool dragging;
+	bool offsetDone;
 
 	int empty_id;
 	int empty_size = 3;
@@ -38,11 +45,11 @@ public class Board : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Events.OnMouseCollide += SelectShape;
+		
 	}
 
 	void OnDestroy(){
-		Events.OnMouseCollide -= SelectShape;
+		
 	}
 	public void AddNewShape(int id, Vector3 pos, Vector3 rot)
 	{		
@@ -150,6 +157,25 @@ public class Board : MonoBehaviour {
 			selectedShape.transform.localEulerAngles = Vector3.Lerp (selectedShape.transform.localEulerAngles, newRotation, 0.25f);
 			selectedShape.transform.localPosition = Vector3.Lerp (selectedShape.transform.localPosition, newPosition, 0.25f);
 		}
+
+		if (dragging&&offsetDone) {
+			newPosition = mousePos+offset;
+			newPosition.y = 0f;
+			selectedShape.transform.localPosition = newPosition;
+		}
+
+		if (Game.Instance.inputManager.mousePressed && !dragging)
+			SelectShape (Game.Instance.inputManager.hits);
+		else if (Game.Instance.inputManager.mousePressed && dragging)
+			CheckMousePos (Game.Instance.inputManager.hits);
+		else if (!Game.Instance.inputManager.mousePressed) {
+			Snap ();
+			dragging = false;
+			offset = Vector3.zero;
+			offsetDone = false;
+		}
+
+
 	}
 	void Done()
 	{
@@ -159,13 +185,54 @@ public class Board : MonoBehaviour {
 		CheckIntegration ();
 	}
 
-	void SelectShape(GameObject go){
-		ShapeAsset sa = go.GetComponentInParent<ShapeAsset> ();
-		if (sa != null) {
-			Events.OnShapeSelected (sa);
-			selectedShape = sa;
-			newRotation = sa.transform.localEulerAngles;
-			newPosition = sa.transform.localPosition;
+	void SelectShape(RaycastHit[] hits){
+		bool selected = false;
+		for (int i = 0; i < hits.Length; i++) {	
+			GameObject go = hits [i].transform.gameObject;
+			ShapeAsset sa = go.GetComponentInParent<ShapeAsset> ();
+			if (sa != null && !dragging) {
+				Events.OnShapeSelected (sa);
+				selectedShape = sa;
+				newRotation = sa.transform.localEulerAngles;
+				newPosition = sa.transform.localPosition;
+				dragging = true;
+			}
+		}			
+	}
+
+	void CheckMousePos(RaycastHit[] hits){
+		for (int i = 0; i < hits.Length; i++) {	
+			GameObject go = hits [i].transform.gameObject;
+			if (go.tag == "Floor") {
+				if (!offsetDone) {
+					offset = newPosition - hits [i].point;
+					offsetDone = true;
+				}
+				mousePos = hits [i].point;
+			}
+		}			
+	}
+
+	void OnMouseRelease(){
+		dragging = false;
+	}
+
+	void Snap(){
+		if (dragging) {
+			newPosition = new Vector3 (Mathf.Round (newPosition.x), Mathf.Round (newPosition.y), Mathf.Round (newPosition.z));
+			selectedShape.transform.localPosition = newPosition;
+			CheckCollision ();
+		}
+	}
+
+	void CheckCollision(){
+		if (selectedShape != null) {
+			ShapeCollider[] scs = selectedShape.GetComponentsInChildren<ShapeCollider> ();
+			foreach (ShapeCollider sc in scs)
+				if (sc.undoIt) {
+					UndoLastTransform ();
+					return;
+				}
 		}
 	}
 

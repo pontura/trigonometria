@@ -5,6 +5,7 @@ using UnityEngine;
 public class ShapeCollider : MonoBehaviour {
 
 	public ShapeAsset shapeAsset;
+	public bool undoIt;
 
 	void Awake()
 	{
@@ -20,5 +21,19 @@ public class ShapeCollider : MonoBehaviour {
 		if (shapeAsset == otherShapeAsset)
 			return;
 		Game.Instance.board.UndoLastTransform ();
+		undoIt = true;
 	}
+
+	void OnTriggerExit (Collider other) {
+		ShapeCollider sc = other.GetComponent<ShapeCollider> ();
+		if (sc == null)
+			return;
+		ShapeAsset otherShapeAsset = sc.shapeAsset;
+		if (otherShapeAsset == null)
+			return;
+		if (shapeAsset == otherShapeAsset)
+			return;
+		undoIt = false;
+	}
+
 }

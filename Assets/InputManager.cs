@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour {
+	
+	public RaycastHit[] hits;
+	public bool mousePressed;
 
 	// Use this for initialization
 	void Start () {
@@ -13,13 +16,13 @@ public class InputManager : MonoBehaviour {
 	void Update () {
 	
 		//Mousse Button
-		if (Input.GetMouseButtonDown (0)) {
+		if (Input.GetMouseButton (0)) {
+			mousePressed = true;
 			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-			RaycastHit hit;
-
-			if (Physics.Raycast (ray, out hit)) {
-				Events.OnMouseCollide (hit.transform.gameObject);
-			}
+			hits = new RaycastHit[0];
+			hits = Physics.RaycastAll (ray);
+		} else {
+			mousePressed = false;
 		}
 	}
 	
