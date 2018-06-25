@@ -14,15 +14,15 @@ public class Board : MonoBehaviour {
 	public bool total_Vol_inside;
 
 
-	Vector3 lastRotation;
+	public Vector3 lastRotation;
 	Vector3 lastPosition;
 
-	Vector3 newRotation;
-	public Vector3 newPosition;
+	public Vector3 newRotation;
+	Vector3 newPosition;
 
-	public Vector3 mousePos;
-	public Vector3 offset;
-	public float offsetFloor;
+	Vector3 mousePos;
+	Vector3 offset;
+	float offsetFloor;
 
 	bool unmoved;
 	bool dragging;
@@ -40,6 +40,7 @@ public class Board : MonoBehaviour {
 	{
 		IDLE,
 		TRANSFORMING,
+		DRAGGING,
 		DONE
 	}
 
@@ -62,6 +63,7 @@ public class Board : MonoBehaviour {
 	public void AddNewShape(int id)
 	{
 		SelectNewShape (id);
+		selectedShape.transform.localEulerAngles = new Vector3(0f,Random.Range (0, 3)*90,0f);
 		selectedShape.transform.localPosition = GetEmptySpace();		
 		NewShapeAdded ();
 		unmoved = true;
@@ -162,6 +164,7 @@ public class Board : MonoBehaviour {
 			newPosition = mousePos+offset;
 			newPosition.y = 0f;
 			selectedShape.transform.localPosition = newPosition;
+			selectedShape.transform.localEulerAngles = newRotation;
 		}
 
 		if (Game.Instance.inputManager.mousePressed && !dragging)
@@ -195,6 +198,8 @@ public class Board : MonoBehaviour {
 				selectedShape = sa;
 				newRotation = sa.transform.localEulerAngles;
 				newPosition = sa.transform.localPosition;
+				lastRotation = sa.transform.localEulerAngles;
+				lastPosition = sa.transform.localPosition;
 				dragging = true;
 			}
 		}			
@@ -228,18 +233,20 @@ public class Board : MonoBehaviour {
 	void CheckCollision(){
 		if (selectedShape != null) {
 			ShapeCollider[] scs = selectedShape.GetComponentsInChildren<ShapeCollider> ();
-			foreach (ShapeCollider sc in scs)
+			foreach (ShapeCollider sc in scs) {
 				if (sc.undoIt) {
 					UndoLastTransform ();
 					return;
 				}
+			}
+			Invoke ("Done", 0.5f);
 		}
 	}
 
 	public void DestroyShape(){
 		all.Remove (selectedShape);
 		Destroy (selectedShape.gameObject);
-		CheckIntegration ();
+		Invoke ("CheckIntegration", 0.5f);
 	}
 
 	public void BreakShape(){
@@ -261,6 +268,7 @@ public class Board : MonoBehaviour {
 	}
 
 	void CheckIntegration(){
+		//Debug.Log ("Check Integration");
 		Mesh targetMesh = targetShape.GetComponent<MeshFilter> ().mesh;
 		float totalvol = 0f;
 		//bool areInside = true;

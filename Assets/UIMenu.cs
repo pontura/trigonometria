@@ -99,7 +99,7 @@ public class UIMenu : MonoBehaviour {
 
 	void ShowMessage(string s){
 		message.text = s;
-		Invoke ("CleanMessage", 3);
+		Invoke ("CleanMessage", 5);
 	}
 
 	void CleanMessage(){
