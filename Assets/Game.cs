@@ -6,6 +6,7 @@ public class Game : MonoBehaviour {
 
 	static Game mInstance = null;
 	public Board board;
+	public ShapeMove shapeMove;
 	public ShapesManager shapesManager;
 	public InputManager inputManager;
 
@@ -21,5 +22,7 @@ public class Game : MonoBehaviour {
 		board = GetComponent<Board> ();
 		shapesManager = GetComponent<ShapesManager> ();
 		inputManager = GetComponent<InputManager> ();
+		shapeMove = GetComponent<ShapeMove> ();
+
 	}
 }

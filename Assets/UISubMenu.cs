@@ -19,28 +19,28 @@ public class UISubMenu : MonoBehaviour {
 	{
 		switch (uiButton.type) {
 		case UIButton.types.MOVE_X_IN:
-			Game.Instance.board.Move (Quaternion.Euler(Game.Instance.board.CameraRot)*new Vector3 (1, 0, 0));			
+			Game.Instance.shapeMove.Move (Quaternion.Euler(Game.Instance.board.CameraRot)*new Vector3 (1, 0, 0));			
 			translateButton.Select();
 			break;
 		case UIButton.types.MOVE_X_OUT:
-			Game.Instance.board.Move (Quaternion.Euler(Game.Instance.board.CameraRot)*new Vector3 (-1, 0, 0));
+			Game.Instance.shapeMove.Move (Quaternion.Euler(Game.Instance.board.CameraRot)*new Vector3 (-1, 0, 0));
 			translateButton.Select();
 			break;
 		case UIButton.types.MOVE_Z_IN:
-			Game.Instance.board.Move (Quaternion.Euler(Game.Instance.board.CameraRot)*new Vector3 (0, 0, 1));
+			Game.Instance.shapeMove.Move (Quaternion.Euler(Game.Instance.board.CameraRot)*new Vector3 (0, 0, 1));
 			translateButton.Select();
 			break;
 		case UIButton.types.MOVE_Z_OUT:
-			Game.Instance.board.Move (Quaternion.Euler(Game.Instance.board.CameraRot)*new Vector3 (0, 0, -1));
+			Game.Instance.shapeMove.Move (Quaternion.Euler(Game.Instance.board.CameraRot)*new Vector3 (0, 0, -1));
 			translateButton.Select();
 			break;
 
 		case UIButton.types.ROTATE_UP:
-			Game.Instance.board.Rotate (90);
+			Game.Instance.shapeMove.Rotate (90);
 			rotateButton.Select();
 			break;
 		case UIButton.types.ROTATE_DOWN:
-			Game.Instance.board.Rotate (-90);
+			Game.Instance.shapeMove.Rotate (-90);
 			rotateButton.Select();
 			break;
 		}

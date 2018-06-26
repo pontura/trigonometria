@@ -4111,6 +4111,7 @@ GameObject:
   - component: {fileID: 2009075060}
   - component: {fileID: 2009075062}
   - component: {fileID: 2009075063}
+  - component: {fileID: 2009075064}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -4146,11 +4147,6 @@ MonoBehaviour:
   selectedShape: {fileID: 0}
   shapesContainer: {fileID: 1222995731}
   all: []
-  floor: {fileID: 150420780}
-  total_Vol_done: 0
-  total_Vol_inside: 0
-  lastRotation: {x: 0, y: 0, z: 0}
-  newRotation: {x: 0, y: 0, z: 0}
   CameraRot: {x: 0, y: 0, z: 0}
   state: 0
 --- !u!114 &2009075061
@@ -4165,6 +4161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   board: {fileID: 2009075060}
+  shapeMove: {fileID: 0}
   shapesManager: {fileID: 2009075062}
   inputManager: {fileID: 0}
 --- !u!114 &2009075062
@@ -4206,6 +4203,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mousePressed: 0
+--- !u!114 &2009075064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2009075058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e450f66b8bdf1484f8e7e2d95de8957e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newRotation: {x: 0, y: 0, z: 0}
+  newPosition: {x: 0, y: 0, z: 0}
+  unmoved: 0
+  state: 0
 --- !u!1 &2009834622
 GameObject:
   m_ObjectHideFlags: 0

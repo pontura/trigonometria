@@ -20,7 +20,7 @@ public class ShapeCollider : MonoBehaviour {
 			return;
 		if (shapeAsset == otherShapeAsset)
 			return;
-		Game.Instance.board.UndoLastTransform ();
+		Game.Instance.shapeMove.UndoLastTransform ();
 		undoIt = true;
 	}
 
