@@ -43,6 +43,14 @@ public class UISubMenu : MonoBehaviour {
 			Game.Instance.shapeMove.Rotate (-90);
 			rotateButton.Select();
 			break;
+		case UIButton.types.MOVE_Y_UP:
+			Game.Instance.shapeMove.Move (Quaternion.Euler(Game.Instance.board.CameraRot)*new Vector3 (0, 1, 0));
+			translateButton.Select();
+			break;
+		case UIButton.types.MOVE_Y_DOWN:
+			Game.Instance.shapeMove.Move (Quaternion.Euler(Game.Instance.board.CameraRot)*new Vector3 (0, -1, 0));
+			translateButton.Select();
+			break;
 		}
 	}
 	public void SetOff()
@@ -50,16 +58,21 @@ public class UISubMenu : MonoBehaviour {
 		rotatePanel.SetActive (false);
 		translatePanel.SetActive (false);
 	}
+	public void SetOff(UIButton.types type)
+	{
+		if(type!=UIButton.types.ROTATE)rotatePanel.SetActive (false);
+		if(type!=UIButton.types.TRANSLATE)translatePanel.SetActive (false);
+	}
 	public void SetOn(UIButton.types type)
 	{
-		SetOff ();
+		SetOff (type);
 
 		switch (type) {
 		case UIButton.types.TRANSLATE:
-			translatePanel.SetActive (true);
-			break;
+				translatePanel.SetActive (!translatePanel.activeSelf);
+				break;
 		case UIButton.types.ROTATE:
-			rotatePanel.SetActive (true);
+			rotatePanel.SetActive (!rotatePanel.activeSelf);
 			break;
 		}
 	}

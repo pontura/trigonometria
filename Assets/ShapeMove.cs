@@ -11,7 +11,7 @@ public class ShapeMove : MonoBehaviour {
 	Vector3 newPosition;
 
 	Vector3 mousePos;
-	Vector3 offset;
+	public Vector3 offset;
 	float offsetFloor;
 
 	bool unmoved;
@@ -92,6 +92,8 @@ public class ShapeMove : MonoBehaviour {
 
 		Vector3 pos = selectedShape.transform.localPosition;
 		pos += moveVector;
+		if (pos.y < 0)
+			pos.y = 0;
 		newPosition = pos;
 		Invoke ("Done", 0.5f);
 	}
@@ -123,7 +125,7 @@ public class ShapeMove : MonoBehaviour {
 		if (GetState() == Board.states.DRAGGING) {
 			if (offsetDone) {
 				newPosition = mousePos+offset;
-				newPosition.y = 0f;
+				//newPosition.y = 0f;
 				ShapeAsset selectedShape = Game.Instance.board.selectedShape;
 				selectedShape.transform.localPosition = newPosition;
 				selectedShape.transform.localEulerAngles = newRotation;
@@ -149,7 +151,7 @@ public class ShapeMove : MonoBehaviour {
 		ShapeAsset selectedShape = Game.Instance.board.selectedShape;
 		selectedShape.transform.localEulerAngles = newRotation;
 		selectedShape.transform.localPosition = newPosition;
-		Game.Instance.board.CheckIntegration ();
+		Game.Instance.integrationManager.CheckIntegration ();
 	}
 
 	void Snap(){

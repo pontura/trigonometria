@@ -23,7 +23,9 @@ public class UIButton : MonoBehaviour  {
 		ROTATE_DOWN,
 		ADD,
 		ZOOM,
-		ROTATE_CAMERA
+		ROTATE_CAMERA,
+		MOVE_Y_UP,
+		MOVE_Y_DOWN
 	}
 	void Start()
 	{
