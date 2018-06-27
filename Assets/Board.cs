@@ -6,14 +6,24 @@ public class Board : MonoBehaviour {
 
 	public GameObject targetShape;
 	public ShapeAsset selectedShape;
-	public Transform shapesContainer;
+	public Transform integrarContainer;
+	public Transform combinarContainer;
+	public Transform redimenContainer;
 	public List<ShapeAsset> all;
 
 	[HideInInspector]
 	public Vector3 CameraRot;
 
-	public states state;
-	public enum states
+	public MechanicStates mechanicState;
+	public enum MechanicStates
+	{
+		INTEGRAR,
+		COMBINAR,
+		REDIMENSIONAR
+	}
+
+	public ActionStates actionState;
+	public enum ActionStates
 	{
 		IDLE,
 		TRANSFORMING,
@@ -23,11 +33,11 @@ public class Board : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		Events.OnMechanicChange += OnMechanicsChange;
 	}
 
 	void OnDestroy(){
-		
+		Events.OnMechanicChange -= OnMechanicsChange;
 	}
 	public void AddNewShape(int id, Vector3 pos, Vector3 rot)
 	{		
@@ -48,7 +58,10 @@ public class Board : MonoBehaviour {
 		ShapesData shapeData = Game.Instance.shapesManager.GetByID (id);
 		ShapeAsset shapeAsset = Instantiate(shapeData.asset);
 
-		shapeAsset.transform.SetParent (shapesContainer);
+		if(mechanicState==MechanicStates.INTEGRAR)
+			shapeAsset.transform.SetParent (integrarContainer);
+		else if(mechanicState==MechanicStates.COMBINAR)
+			shapeAsset.transform.SetParent (combinarContainer);
 		shapeAsset.transform.localScale = Vector3.one;
 		shapeAsset.SetColor(Game.Instance.shapesManager.GetFreeColor (all));
 
@@ -70,7 +83,10 @@ public class Board : MonoBehaviour {
 		List<GameObject> childs = new List<GameObject>();
 		int childID = 0;
 		foreach (ShapeAsset.ChildData childData in selectedShape.childs) {
-			childData.child.transform.SetParent (shapesContainer);
+			if(mechanicState==MechanicStates.INTEGRAR)
+				childData.child.transform.SetParent (integrarContainer);
+			else if(mechanicState==MechanicStates.COMBINAR)
+				childData.child.transform.SetParent (combinarContainer);
 			childs.Add (childData.child);
 			childID = childData.id;
 		}
@@ -86,5 +102,22 @@ public class Board : MonoBehaviour {
 
 	void CheckIntegration(){
 		Game.Instance.integrationManager.CheckIntegration ();
+	}
+
+	void OnMechanicsChange(MechanicStates state){		
+		mechanicState = state;
+		if (mechanicState == MechanicStates.INTEGRAR) {
+			integrarContainer.gameObject.SetActive (true);
+			combinarContainer.gameObject.SetActive (false);
+			redimenContainer.gameObject.SetActive (false);
+		} else if (mechanicState == MechanicStates.COMBINAR) {
+			integrarContainer.gameObject.SetActive (false);
+			combinarContainer.gameObject.SetActive (true);
+			redimenContainer.gameObject.SetActive (false);
+		} else if (mechanicState == MechanicStates.REDIMENSIONAR) {
+			integrarContainer.gameObject.SetActive (false);
+			combinarContainer.gameObject.SetActive (false);
+			redimenContainer.gameObject.SetActive (true);
+		}
 	}
 }

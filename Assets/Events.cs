@@ -11,4 +11,6 @@ public static class Events {
 	public static System.Action<ShapeAsset> OnShapeSelected = delegate { };
 	public static System.Action OnCameraRotate = delegate { };
 	public static System.Action<string> OnMessageShow = delegate { };
+
+	public static System.Action<Board.MechanicStates> OnMechanicChange = delegate { };
 }

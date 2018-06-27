@@ -54,7 +54,7 @@ public class ShapeMove : MonoBehaviour {
 	public void Rotate(int qty)
 	{
 		//print ("ROTA");
-		if (GetState() == Board.states.TRANSFORMING)
+		if (GetState() == Board.ActionStates.TRANSFORMING)
 			return;
 
 		if (unmoved)
@@ -62,7 +62,7 @@ public class ShapeMove : MonoBehaviour {
 
 		ShapeAsset selectedShape = Game.Instance.board.selectedShape;
 
-		SetState(Board.states.TRANSFORMING);
+		SetState(Board.ActionStates.TRANSFORMING);
 		lastRotation = selectedShape.transform.localEulerAngles;
 
 		Vector3 rot = selectedShape.transform.localEulerAngles;
@@ -79,7 +79,7 @@ public class ShapeMove : MonoBehaviour {
 	public void Move(Vector3 moveVector)
 	{
 
-		if (GetState() == Board.states.TRANSFORMING)
+		if (GetState() == Board.ActionStates.TRANSFORMING)
 			return;
 
 		if (unmoved)
@@ -87,7 +87,7 @@ public class ShapeMove : MonoBehaviour {
 
 		ShapeAsset selectedShape = Game.Instance.board.selectedShape;
 
-		SetState(Board.states.TRANSFORMING);
+		SetState(Board.ActionStates.TRANSFORMING);
 		lastPosition = selectedShape.transform.localPosition;
 
 		Vector3 pos = selectedShape.transform.localPosition;
@@ -99,9 +99,9 @@ public class ShapeMove : MonoBehaviour {
 	}
 	public void UndoLastTransform()
 	{
-		if (GetState() == Board.states.DRAGGING)
+		if (GetState() == Board.ActionStates.DRAGGING)
 			return;
-		SetState(Board.states.DONE);
+		SetState(Board.ActionStates.DONE);
 		CancelInvoke ();
 		ShapeAsset selectedShape = Game.Instance.board.selectedShape;
 		if(unmoved){
@@ -115,14 +115,14 @@ public class ShapeMove : MonoBehaviour {
 	}
 	void Update()
 	{
-		if (GetState() == Board.states.TRANSFORMING) {
+		if (GetState() == Board.ActionStates.TRANSFORMING) {
 			ShapeAsset selectedShape = Game.Instance.board.selectedShape;
 			selectedShape.transform.localEulerAngles = Vector3.Lerp (selectedShape.transform.localEulerAngles, newRotation, 0.25f);
 			selectedShape.transform.localPosition = Vector3.Lerp (selectedShape.transform.localPosition, newPosition, 0.25f);
 		}
 
 
-		if (GetState() == Board.states.DRAGGING) {
+		if (GetState() == Board.ActionStates.DRAGGING) {
 			if (offsetDone) {
 				newPosition = mousePos+offset;
 				//newPosition.y = 0f;
@@ -135,7 +135,7 @@ public class ShapeMove : MonoBehaviour {
 				CheckMousePos (Game.Instance.inputManager.hits);
 			else if (!Game.Instance.inputManager.mousePressed) {
 				Snap ();
-				SetState (Board.states.IDLE);
+				SetState (Board.ActionStates.IDLE);
 				offsetDone = false;
 			}
 		}else{			
@@ -147,7 +147,7 @@ public class ShapeMove : MonoBehaviour {
 	}
 	void Done()
 	{
-		SetState (Board.states.DONE);
+		SetState (Board.ActionStates.DONE);
 		ShapeAsset selectedShape = Game.Instance.board.selectedShape;
 		selectedShape.transform.localEulerAngles = newRotation;
 		selectedShape.transform.localPosition = newPosition;
@@ -186,7 +186,7 @@ public class ShapeMove : MonoBehaviour {
 				newPosition = sa.transform.localPosition;
 				lastRotation = sa.transform.localEulerAngles;
 				lastPosition = sa.transform.localPosition;
-				SetState (Board.states.DRAGGING);
+				SetState (Board.ActionStates.DRAGGING);
 			}
 		}			
 	}
@@ -204,11 +204,11 @@ public class ShapeMove : MonoBehaviour {
 		}			
 	}
 
-	void SetState(Board.states s){
-		Game.Instance.board.state = s;
+	void SetState(Board.ActionStates s){
+		Game.Instance.board.actionState = s;
 	}
 
-	Board.states GetState(){
-		return Game.Instance.board.state;
+	Board.ActionStates GetState(){
+		return Game.Instance.board.actionState;
 	}
 }

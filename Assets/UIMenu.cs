@@ -6,8 +6,11 @@ using UnityEngine.UI;
 public class UIMenu : MonoBehaviour {
 
 	UISubMenu submenu;
+	public GameObject ShapesMenu;
+	public GameObject RedimenMenu;
 	public GameObject buttonsContainer;
 	public Text message;
+	public Dropdown mechanicsSelector;
 	bool isOn;
 
 	void Start () {
@@ -104,5 +107,25 @@ public class UIMenu : MonoBehaviour {
 
 	void CleanMessage(){
 		message.text = "";
+	}
+
+	public void OnMechanicChange(){
+		switch (mechanicsSelector.value) {
+		case 0:
+			ShapesMenu.SetActive (true);
+			RedimenMenu.SetActive (false);
+			Events.OnMechanicChange (Board.MechanicStates.INTEGRAR);
+			break;
+		case 1:
+			ShapesMenu.SetActive (true);
+			RedimenMenu.SetActive (false);
+			Events.OnMechanicChange (Board.MechanicStates.COMBINAR);
+			break;
+		case 2:
+			ShapesMenu.SetActive (false);
+			RedimenMenu.SetActive (true);
+			Events.OnMechanicChange (Board.MechanicStates.REDIMENSIONAR);
+			break;
+		}
 	}
 }
