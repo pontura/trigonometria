@@ -19,9 +19,9 @@ public class CameraInScene : MonoBehaviour {
 	public states state;
 	public enum states
 	{
+		DONE,
 		ZOOM,
-		ROT,
-		DONE
+		ROT
 	}
 
 	void Start () {
@@ -46,28 +46,32 @@ public class CameraInScene : MonoBehaviour {
 	}
 
 	void OnCameraRotate(){
-		Vector3 rot = cameraPivot.transform.localEulerAngles;
-		newRot = rot.y + 90;
-		Game.Instance.board.CameraRot = new Vector3 (rot.x, rot.y + 90, rot.z);
-		state = states.ROT;
-		invDuration =1f/0.5f;
-		timerStart = Time.time;
-		Invoke ("Done", 0.25f);
+		if (state == states.DONE) {
+			Vector3 rot = cameraPivot.transform.localEulerAngles;
+			newRot = rot.y + 90;
+			Game.Instance.board.CameraRot = new Vector3 (rot.x, rot.y + 90, rot.z);
+			state = states.ROT;
+			invDuration = 1f / 0.5f;
+			timerStart = Time.time;
+			Invoke ("Done", 0.25f);
+		}
 	}
 
 	void OnZoom(float value)
 	{
-		if(value == 1)
-			zoom = zoomIn;
-		else if(value == 2)
-			zoom = defaultZoom;
-		else if(value == 3)
-			zoom = zoomOut;
+		if (state == states.DONE) {
+			if (value == 1)
+				zoom = zoomIn;
+			else if (value == 2)
+				zoom = defaultZoom;
+			else if (value == 3)
+				zoom = zoomOut;
 
-		state = states.ZOOM;
-		invDuration =1f/0.5f;
-		timerStart = Time.time;
-		Invoke ("Done", 0.5f);
+			state = states.ZOOM;
+			invDuration = 1f / 0.5f;
+			timerStart = Time.time;
+			Invoke ("Done", 0.5f);
+		}
 	}
 
 	void Done()

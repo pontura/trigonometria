@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class IntegrationManager : MonoBehaviour {
 
+	public GameObject targetShape;
 	public bool integration_done;
 
 	bool total_Vol_done;
@@ -21,7 +22,7 @@ public class IntegrationManager : MonoBehaviour {
 
 	public void CheckIntegration(){
 		//Debug.Log ("Check Integration");
-		Mesh targetMesh = Game.Instance.board.targetShape.GetComponent<MeshFilter> ().mesh;
+		Mesh targetMesh = targetShape.GetComponent<MeshFilter> ().mesh;
 		float totalvol = 0f;
 		//bool areInside = true;
 		foreach (ShapeAsset sa in Game.Instance.board.all) {

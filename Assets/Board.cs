@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Board : MonoBehaviour {
 
-	public GameObject targetShape;
 	public ShapeAsset selectedShape;
 	public Transform integrarContainer;
 	public Transform combinarContainer;

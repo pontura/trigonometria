@@ -14,6 +14,26 @@ public class UISubMenu : MonoBehaviour {
 	void Start () {
 		SetOff ();
 		Events.OnButtonClickd += OnButtonClickd;
+		Events.OnSliderValueChange += OnSliderValueChange;
+	}
+
+	void OnDestroy(){
+		Events.OnButtonClickd -= OnButtonClickd;
+		Events.OnSliderValueChange -= OnSliderValueChange;
+	}
+
+	void OnSliderValueChange(UIScaleSlider uiSlider){
+		switch (uiSlider.type) {
+		case UIScaleSlider.types.SCALE_X:
+			Game.Instance.redimensionManager.ScaleX (uiSlider.slider.value, uiSlider.slider.minValue, uiSlider.slider.maxValue);
+			break;
+		case UIScaleSlider.types.SCALE_Y:
+			Game.Instance.redimensionManager.ScaleY (uiSlider.slider.value, uiSlider.slider.minValue, uiSlider.slider.maxValue);
+			break;
+		case UIScaleSlider.types.SCALE_Z:
+			Game.Instance.redimensionManager.ScaleZ (uiSlider.slider.value, uiSlider.slider.minValue, uiSlider.slider.maxValue);
+			break;
+		}
 	}
 	void OnButtonClickd(UIButton uiButton)
 	{

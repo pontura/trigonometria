@@ -420,6 +420,7 @@ GameObject:
   m_Component:
   - component: {fileID: 107452052}
   - component: {fileID: 107452053}
+  - component: {fileID: 107452054}
   m_Layer: 5
   m_Name: Slider_Y
   m_TagString: Untagged
@@ -496,6 +497,20 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &107452054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 107452051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 514698e51822d414ea1f9cca3a55ead7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  toColirize: []
+  slider: {fileID: 0}
 --- !u!1 &150420780
 GameObject:
   m_ObjectHideFlags: 0
@@ -725,6 +740,7 @@ GameObject:
   m_Component:
   - component: {fileID: 266825512}
   - component: {fileID: 266825513}
+  - component: {fileID: 266825514}
   m_Layer: 5
   m_Name: Slider_Z
   m_TagString: Untagged
@@ -801,6 +817,20 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &266825514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 266825511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 514698e51822d414ea1f9cca3a55ead7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 2
+  toColirize: []
+  slider: {fileID: 0}
 --- !u!1 &290731616
 GameObject:
   m_ObjectHideFlags: 0
@@ -1661,6 +1691,7 @@ GameObject:
   m_Component:
   - component: {fileID: 568791928}
   - component: {fileID: 568791929}
+  - component: {fileID: 568791930}
   m_Layer: 5
   m_Name: Slider_X
   m_TagString: Untagged
@@ -1737,6 +1768,20 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &568791930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 568791927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 514698e51822d414ea1f9cca3a55ead7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  toColirize: []
+  slider: {fileID: 0}
 --- !u!1 &582401566
 GameObject:
   m_ObjectHideFlags: 0
@@ -5951,6 +5996,7 @@ GameObject:
   - component: {fileID: 2009075063}
   - component: {fileID: 2009075064}
   - component: {fileID: 2009075065}
+  - component: {fileID: 2009075066}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -5982,7 +6028,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20575b6b2d0a94b42ab6a2f841b16342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetShape: {fileID: 960548213}
   selectedShape: {fileID: 0}
   integrarContainer: {fileID: 2045239580}
   combinarContainer: {fileID: 1036644931}
@@ -6007,6 +6052,7 @@ MonoBehaviour:
   shapesManager: {fileID: 2009075062}
   inputManager: {fileID: 0}
   integrationManager: {fileID: 0}
+  redimensionManager: {fileID: 0}
 --- !u!114 &2009075062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6069,7 +6115,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccd5770227f09994e9f178672948a301, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetShape: {fileID: 960548213}
   integration_done: 0
+--- !u!114 &2009075066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2009075058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ea450ee8878fe44d8daa22ae158b8b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainShape: {fileID: 2014381123}
 --- !u!1 &2009834622
 GameObject:
   m_ObjectHideFlags: 0
