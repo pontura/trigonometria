@@ -114,16 +114,19 @@ public class UIMenu : MonoBehaviour {
 		case 0:
 			ShapesMenu.SetActive (true);
 			RedimenMenu.SetActive (false);
+			submenu.SetOff ();
 			Events.OnMechanicChange (Board.MechanicStates.INTEGRAR);
 			break;
 		case 1:
 			ShapesMenu.SetActive (true);
 			RedimenMenu.SetActive (false);
+			submenu.SetOff ();
 			Events.OnMechanicChange (Board.MechanicStates.COMBINAR);
 			break;
 		case 2:
 			ShapesMenu.SetActive (false);
 			RedimenMenu.SetActive (true);
+			submenu.SetOff ();
 			Events.OnMechanicChange (Board.MechanicStates.REDIMENSIONAR);
 			break;
 		}
