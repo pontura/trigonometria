@@ -1049,6 +1049,21 @@ public class Math3d {
 		return Mathf.Abs(volume);
 	}
 
+	public static float VolumeOfMesh(Mesh mesh, Transform transform)
+	{		
+		float volume = 0;
+		Vector3[] vertices = mesh.vertices;
+		int[] triangles = mesh.triangles;
+		for (int i = 0; i < mesh.triangles.Length; i += 3)
+		{
+			Vector3 p1 = Vector3.Scale(vertices[triangles[i + 0]],transform.localScale);
+			Vector3 p2 = Vector3.Scale(vertices[triangles[i + 1]],transform.localScale);
+			Vector3 p3 = Vector3.Scale(vertices[triangles[i + 2]],transform.localScale);
+			volume += SignedVolumeOfTriangle(p1, p2, p3);
+		}
+		return Mathf.Abs(volume);
+	}
+
 	public static bool IsPointInside(Mesh aMesh, Vector3 aLocalPoint)
      {
 		Debug.Log ("LocalPoint: "+aLocalPoint);

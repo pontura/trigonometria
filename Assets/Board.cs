@@ -5,9 +5,12 @@ using UnityEngine;
 public class Board : MonoBehaviour {
 
 	public ShapeAsset selectedShape;
-	public Transform integrarContainer;
+	public Transform compararContainer;
+	public GameObject compararCanvas;
 	public Transform combinarContainer;
+	public GameObject combinarCanvas;
 	public Transform redimenContainer;
+	public GameObject redimenCanvas;
 	public List<ShapeAsset> all;
 
 	[HideInInspector]
@@ -58,7 +61,7 @@ public class Board : MonoBehaviour {
 		ShapeAsset shapeAsset = Instantiate(shapeData.asset);
 
 		if(mechanicState==MechanicStates.INTEGRAR)
-			shapeAsset.transform.SetParent (integrarContainer);
+			shapeAsset.transform.SetParent (compararContainer);
 		else if(mechanicState==MechanicStates.COMBINAR)
 			shapeAsset.transform.SetParent (combinarContainer);
 		shapeAsset.transform.localScale = Vector3.one;
@@ -83,7 +86,7 @@ public class Board : MonoBehaviour {
 		int childID = 0;
 		foreach (ShapeAsset.ChildData childData in selectedShape.childs) {
 			if(mechanicState==MechanicStates.INTEGRAR)
-				childData.child.transform.SetParent (integrarContainer);
+				childData.child.transform.SetParent (compararContainer);
 			else if(mechanicState==MechanicStates.COMBINAR)
 				childData.child.transform.SetParent (combinarContainer);
 			childs.Add (childData.child);
@@ -106,17 +109,26 @@ public class Board : MonoBehaviour {
 	void OnMechanicsChange(MechanicStates state){		
 		mechanicState = state;
 		if (mechanicState == MechanicStates.INTEGRAR) {
-			integrarContainer.gameObject.SetActive (true);
+			compararContainer.gameObject.SetActive (true);
+			compararCanvas.SetActive (true);
 			combinarContainer.gameObject.SetActive (false);
+			combinarCanvas.SetActive (false);
 			redimenContainer.gameObject.SetActive (false);
+			redimenCanvas.SetActive (false);
 		} else if (mechanicState == MechanicStates.COMBINAR) {
-			integrarContainer.gameObject.SetActive (false);
+			compararContainer.gameObject.SetActive (false);
+			compararCanvas.SetActive (false);
 			combinarContainer.gameObject.SetActive (true);
+			combinarCanvas.SetActive (true);
 			redimenContainer.gameObject.SetActive (false);
+			redimenCanvas.SetActive (false);
 		} else if (mechanicState == MechanicStates.REDIMENSIONAR) {
-			integrarContainer.gameObject.SetActive (false);
+			compararContainer.gameObject.SetActive (false);
+			compararCanvas.SetActive (false);
 			combinarContainer.gameObject.SetActive (false);
+			combinarCanvas.SetActive (false);
 			redimenContainer.gameObject.SetActive (true);
+			redimenCanvas.SetActive (true);
 		}
 	}
 }

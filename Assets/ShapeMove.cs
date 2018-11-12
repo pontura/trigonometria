@@ -151,6 +151,7 @@ public class ShapeMove : MonoBehaviour {
 		ShapeAsset selectedShape = Game.Instance.board.selectedShape;
 		selectedShape.transform.localEulerAngles = newRotation;
 		selectedShape.transform.localPosition = newPosition;
+		if(Game.Instance.board.mechanicState == Board.MechanicStates.INTEGRAR)
 		Game.Instance.integrationManager.CheckIntegration ();
 	}
 
