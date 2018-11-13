@@ -17,16 +17,18 @@ public class LevelManager : MonoBehaviour {
 		public string unidad;
 		public float escala;
 		public string consignaComparar;
-		public GameObject levelShape;
+		public float camSizeExample;
+		public GameObject levelShapeExample;
+		public ShapeAsset levelShape;
 		public Vector3 medidasLevelShape;
 		public float correctAnswer;
-		public GameObject levelSubShape;
+		public ShapeAsset levelSubShape;
 		public Vector3 medidasLevelSubShape;
 	}
 
 	// Use this for initialization
 	void Start () {
-		
+		ResetShapeManager ();
 	}
 	
 	// Update is called once per frame
@@ -38,7 +40,28 @@ public class LevelManager : MonoBehaviour {
 		return ejercicios [currentLevel].consignaComparar;
 	}
 
-	public GameObject GetLevelShape(){
+	/*public GameObject GetLevelShape(){
 		return ejercicios [currentLevel].levelShape;
+	}*/
+
+	public void LevelShapeShow(bool enable){
+		ejercicios [currentLevel].levelShapeExample.SetActive (enable);
+	}
+
+	public void NextExcersice(){
+		currentLevel++;
+		if (currentLevel >= ejercicios.Count)
+			currentLevel = 0;
+
+		ResetShapeManager ();
+	}
+
+	void ResetShapeManager(){
+		Game.Instance.shapesManager.all.Clear ();
+		Game.Instance.shapesManager.AddShape (ejercicios [currentLevel].levelShape.GetComponent<ShapeAsset> (), 1);
+		if (ejercicios [currentLevel].levelSubShape != null) {
+			Game.Instance.shapesManager.AddShape (ejercicios [currentLevel].levelSubShape.GetComponent<ShapeAsset> (), 2);
+		}
+		Camera.main.orthographicSize = ejercicios [currentLevel].camSizeExample;
 	}
 }

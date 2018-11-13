@@ -21,6 +21,8 @@ public class ShapeMove : MonoBehaviour {
 	int empty_size = 3;
 	int empty_offset = -2;
 
+	bool selOrder;
+
 	// Use this for initialization
 	void Start () {
 
@@ -177,8 +179,14 @@ public class ShapeMove : MonoBehaviour {
 	}
 
 	void SelectShape(RaycastHit[] hits){
-		for (int i = 0; i < hits.Length; i++) {	
-			GameObject go = hits [i].transform.gameObject;
+		for (int i = 0; i < hits.Length; i++) {
+			GameObject go;
+			if (selOrder) {
+				go = hits [hits.Length-1-i].transform.gameObject;
+			} else {
+				go = hits [i].transform.gameObject;
+			}
+			selOrder = !selOrder;
 			ShapeAsset sa = go.GetComponentInParent<ShapeAsset> ();
 			if (sa != null) {
 				Events.OnShapeSelected (sa);

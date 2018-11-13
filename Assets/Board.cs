@@ -50,10 +50,17 @@ public class Board : MonoBehaviour {
 	}
 	public void AddNewShape(int id)
 	{
-		SelectNewShape (id);
-		selectedShape.transform.localEulerAngles = new Vector3(0f,Random.Range (0, 3)*90,0f);
-		selectedShape.transform.localPosition = Game.Instance.shapeMove.GetEmptySpace();		
-		NewShapeAdded (true);
+		if (mechanicState == MechanicStates.INTEGRAR) {
+			if (all.Count >= Game.Instance.integrationManager.answer) {
+				Game.Instance.integrationManager.count.color = Color.red;	
+				return;
+			}
+			SelectNewShape (id);
+			selectedShape.transform.localEulerAngles = new Vector3 (0f, Random.Range (0, 3) * 90, 0f);
+			selectedShape.transform.localPosition = Game.Instance.shapeMove.GetEmptySpace ();		
+			NewShapeAdded (true);
+			Game.Instance.integrationManager.count.text = "" + (Game.Instance.integrationManager.answer - all.Count);
+		}
 	}
 	void SelectNewShape(int id)
 	{
@@ -79,6 +86,13 @@ public class Board : MonoBehaviour {
 		all.Remove (selectedShape);
 		Destroy (selectedShape.gameObject);
 		Invoke ("CheckIntegration", 0.5f);
+	}
+
+	public void Clear(){
+		foreach (ShapeAsset sa in all) {			
+			Destroy (sa.gameObject);
+		}
+		all.Clear ();
 	}
 
 	public void BreakShape(){

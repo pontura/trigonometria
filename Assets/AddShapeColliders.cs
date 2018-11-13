@@ -45,4 +45,21 @@ public class AddShapeColliders : MonoBehaviour {
 		go.GetComponent<MeshRenderer> ().enabled = false;
 
 	}
+
+	public bool GetVertexInside(){
+		bool areInside = true;
+		for(int i=0;i<colliderShapes.Count;i++){
+			for(int j=0;j<colliderShapes[i].transform.childCount;j++){
+				GameObject child = colliderShapes[i].transform.GetChild(j).gameObject;
+				if(child.tag =="vertexCollider"){
+					areInside = child.GetComponent<OnVertexCollide> ().isInsideTarget;
+					if (!areInside)
+						j = colliderShapes[i].transform.childCount;
+				}
+			}
+			if (!areInside) 
+				i = colliderShapes.Count;
+		}
+		return areInside;
+	}
 }

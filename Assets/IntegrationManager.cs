@@ -13,8 +13,14 @@ public class IntegrationManager : MonoBehaviour {
 	public GameObject confirmation;
 
 	public Text consigna;
+	public InputField respuesta;
+	public Text count;
+	public GameObject badConfirmationTxt;
 
 	public float answer;
+
+	Material targetMaterial;
+	Color originalTargetColor;
 
 	public IntegrationStates integrationState;
 	public enum IntegrationStates{
@@ -29,6 +35,8 @@ public class IntegrationManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		integrationState = IntegrationStates.question;
+		targetMaterial = targetShape.GetComponent<Renderer> ().material;
+		originalTargetColor = targetMaterial.color;
 		SetStateScreen ();
 	}
 	
@@ -41,18 +49,23 @@ public class IntegrationManager : MonoBehaviour {
 		Debug.Log ("Check Integration");
 		Mesh targetMesh = targetShape.GetComponent<MeshFilter> ().mesh;
 		float totalvol = 0f;
+		float insideVol = 0f;
 		//bool areInside = true;
 		foreach (ShapeAsset sa in Game.Instance.board.all) {
+			bool isInside = sa.gameObject.GetComponent<AddShapeColliders> ().GetVertexInside ();
 			if (sa.childs.Count > 0) {
 				foreach (ShapeAsset.ChildData chd in sa.childs) {
 					Mesh mesh = chd.child.GetComponent<MeshFilter> ().mesh;
-					Debug.Log (chd.child.name);
+					//Debug.Log (chd.child.name);
 					/*if(areInside)
 						foreach (Vector3 v in mesh.vertices)
 							if(areInside)
 								areInside = Math3d.IsPointInside (targetMesh, chd.child.transform.TransformPoint(v));*/
 					//Debug.Log ("AreInside: " + areInside);
-					totalvol += Math3d.VolumeOfMesh (mesh);
+					float vol = Math3d.VolumeOfMesh (mesh);
+					totalvol += vol;
+					if (isInside)
+						insideVol += vol;
 				}
 			} else {
 				Mesh mesh = sa.gameObject.GetComponentInChildren<MeshFilter> ().mesh;
@@ -61,9 +74,12 @@ public class IntegrationManager : MonoBehaviour {
 						if(areInside)
 							areInside = Math3d.IsPointInside (targetMesh, targetShape.transform.InverseTransformPoint(v));*/
 				//Debug.Log ("AreInside: " + areInside);
-				Debug.Log (sa.gameObject.name);
-				totalvol += Math3d.VolumeOfMesh (mesh,sa.transform.GetChild(0));
-				Debug.Log (sa.gameObject.name+": "+totalvol+" / "+mesh.bounds + " / "+ sa.gameObject.GetComponentInChildren<Renderer> ().bounds);
+
+				float vol = Math3d.VolumeOfMesh (mesh,sa.transform.GetChild(0));
+				totalvol += vol;
+				if (isInside)
+					insideVol += vol;
+				//Debug.Log (sa.gameObject.name+": "+totalvol+" / "+mesh.bounds + " / "+ sa.gameObject.GetComponentInChildren<Renderer> ().bounds);
 			}
 		}
 
@@ -74,13 +90,13 @@ public class IntegrationManager : MonoBehaviour {
 		else
 			total_Vol_done = false;
 
-		GameObject[] v = GameObject.FindGameObjectsWithTag ("vertexCollider");
-		if (v.Length > 0) {
+		GameObject[] vc = GameObject.FindGameObjectsWithTag ("vertexCollider");
+		if (vc.Length > 0) {
 			bool areInside = true;
-			for (int i = 0; i < v.Length; i++) {
-				areInside = v [i].GetComponent<OnVertexCollide> ().isInsideTarget;
+			for (int i = 0; i < vc.Length; i++) {
+				areInside = vc [i].GetComponent<OnVertexCollide> ().isInsideTarget;
 				if (!areInside) {
-					i = v.Length;
+					i = vc.Length;
 				}
 			}
 			total_Vol_inside = areInside;
@@ -88,12 +104,24 @@ public class IntegrationManager : MonoBehaviour {
 
 
 		if (total_Vol_done && total_Vol_inside) {
+			Game.Instance.board.Clear ();
 			integration_done = true;
+			float h, s, v;
+			Color.RGBToHSV (originalTargetColor, out h, out s, out v);
+			targetMaterial.color = Color.HSVToRGB (h, 1f, v);
 			Events.OnMessageShow ("¡Buen trabajo!");
+			Invoke ("SetConfirmation", 5);
+		} else if(total_Vol_inside){
+			if (Game.Instance.board.all.Count >= answer) {
+				count.color = Color.red;
+				targetMaterial.color = new Color (255, 0, 0, originalTargetColor.a);
+				Invoke ("SetConfirmation", 5);
+			}
 		}
 
-		Debug.Log (targetVol + " = " + totalvol);
-		Debug.Log (System.Math.Round (targetVol*100,6) + " = " + System.Math.Round (totalvol*100,6));
+		Debug.Log (targetVol + " = " + totalvol + " = "+insideVol) ;
+		//Debug.Log (targetVol + " = " + totalvol);
+		//Debug.Log (System.Math.Round (targetVol*100,6) + " = " + System.Math.Round (totalvol*100,6));
 	}
 
 	void SetStateScreen(){
@@ -113,15 +141,41 @@ public class IntegrationManager : MonoBehaviour {
 		}
 	}
 
-	void SetConsigna(){		
-		consigna.text = Game.Instance.levelManager.GetConsignaComparar ();
-	}
-
-	public void SetAnswer(string s){
-		//answer = float.Parse(s);
-		Debug.Log(s);
-		integrationState = IntegrationStates.integrating;
+	void SetConfirmation(){		
+		integrationState = IntegrationStates.confirmation;
 		SetStateScreen ();
 	}
 
+	void SetConsigna(){		
+		consigna.text = Game.Instance.levelManager.GetConsignaComparar ();
+		targetMaterial.color = originalTargetColor;
+		Game.Instance.levelManager.LevelShapeShow (true);
+	}
+
+	public void SetAnswer(string s){
+		count.text = respuesta.text;
+		answer = float.Parse(respuesta.text);
+		Debug.Log(respuesta.text);
+		integrationState = IntegrationStates.integrating;
+		respuesta.text = "";
+		Game.Instance.levelManager.LevelShapeShow (false);
+		SetStateScreen ();
+	}
+
+
+	public void Confirmation(bool confirm){		
+		if (!confirm) {
+			badConfirmationTxt.SetActive (true);
+			Invoke ("NextExcersice", 5);
+		} else {
+			Game.Instance.levelManager.NextExcersice ();
+			NextExcersice ();
+		}
+	}
+
+	public void NextExcersice(){
+		Game.Instance.board.Clear ();
+		integrationState = IntegrationStates.question;
+		SetStateScreen ();
+	}
 }

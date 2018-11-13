@@ -29,4 +29,11 @@ public class ShapesManager : MonoBehaviour {
 		}
 		return colors [shapes.Count % colors.Count];
 	}
+
+	public void AddShape(ShapeAsset sa, int id){
+		ShapesData sd = new ShapesData ();
+		sd.id = id;
+		sd.asset = sa;
+		all.Add (sd);
+	}
 }
