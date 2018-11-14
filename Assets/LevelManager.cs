@@ -24,6 +24,7 @@ public class LevelManager : MonoBehaviour {
 		public float correctAnswer;
 		public ShapeAsset levelSubShape;
 		public Vector3 medidasLevelSubShape;
+		public Vector3 snapStep;
 	}
 
 	// Use this for initialization
@@ -44,6 +45,10 @@ public class LevelManager : MonoBehaviour {
 		return ejercicios [currentLevel].levelShape;
 	}*/
 
+	public float GetCorrectAnswer(){
+		return ejercicios [currentLevel].correctAnswer;
+	}
+
 	public void LevelShapeShow(bool enable){
 		ejercicios [currentLevel].levelShapeExample.SetActive (enable);
 	}
@@ -63,5 +68,9 @@ public class LevelManager : MonoBehaviour {
 			Game.Instance.shapesManager.AddShape (ejercicios [currentLevel].levelSubShape.GetComponent<ShapeAsset> (), 2);
 		}
 		Camera.main.orthographicSize = ejercicios [currentLevel].camSizeExample;
+	}
+
+	public Vector3 GetSnap(){
+		return ejercicios [currentLevel].snapStep;
 	}
 }

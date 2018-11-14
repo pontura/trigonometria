@@ -31,6 +31,7 @@ public class IntegrationManager : MonoBehaviour {
 
 	bool total_Vol_done;
 	bool total_Vol_inside;
+	bool vol_inside;
 
 	// Use this for initialization
 	void Start () {
@@ -85,10 +86,15 @@ public class IntegrationManager : MonoBehaviour {
 
 		float targetVol = Math3d.VolumeOfMesh (targetMesh,targetShape.transform);
 
-		if (System.Math.Round (targetVol*100, 6) == System.Math.Round (totalvol*100, 6))
+		if (System.Math.Round (targetVol * 100, 6) == System.Math.Round (totalvol * 100, 6))
 			total_Vol_done = true;
-		else
+		else {
 			total_Vol_done = false;
+			if (System.Math.Round (targetVol * 100, 6) == System.Math.Round (insideVol * 100, 6))
+				vol_inside = true;
+			else
+				vol_inside = false;
+		}
 
 		GameObject[] vc = GameObject.FindGameObjectsWithTag ("vertexCollider");
 		if (vc.Length > 0) {
@@ -109,12 +115,28 @@ public class IntegrationManager : MonoBehaviour {
 			float h, s, v;
 			Color.RGBToHSV (originalTargetColor, out h, out s, out v);
 			targetMaterial.color = Color.HSVToRGB (h, 1f, v);
-			Events.OnMessageShow ("¡Buen trabajo!");
+			Events.OnMessageShow ("Completaste el cuerpo principal");
 			Invoke ("SetConfirmation", 5);
-		} else if(total_Vol_inside){
+		} else if (total_Vol_inside) {
 			if (Game.Instance.board.all.Count >= answer) {
 				count.color = Color.red;
 				targetMaterial.color = new Color (255, 0, 0, originalTargetColor.a);
+				Events.OnMessageShow ("No tienes más cuerpos para agregar");
+				Invoke ("SetConfirmation", 5);
+			}
+		} else if (vol_inside) {
+			if (answer > Game.Instance.levelManager.GetCorrectAnswer ()) {
+				integration_done = true;
+				float h, s, v;
+				Color.RGBToHSV (originalTargetColor, out h, out s, out v);
+				targetMaterial.color = Color.HSVToRGB (h, 1f, v);
+				foreach (ShapeAsset sa in Game.Instance.board.all) {
+					MeshRenderer[] mrs = sa.gameObject.GetComponentsInChildren<MeshRenderer> ();
+					foreach (MeshRenderer mr in mrs) {
+						mr.material.color = Color.red;
+					}
+				}
+				Events.OnMessageShow ("Completaste el cuerpo pero te quedaron prismas afuera");
 				Invoke ("SetConfirmation", 5);
 			}
 		}
@@ -143,6 +165,7 @@ public class IntegrationManager : MonoBehaviour {
 
 	void SetConfirmation(){		
 		integrationState = IntegrationStates.confirmation;
+		Events.CloseSubMenu ();
 		SetStateScreen ();
 	}
 

@@ -158,7 +158,8 @@ public class ShapeMove : MonoBehaviour {
 	}
 
 	void Snap(){
-		newPosition = new Vector3 (Mathf.Round (newPosition.x), Mathf.Round (newPosition.y), Mathf.Round (newPosition.z));
+		Vector3 step = Game.Instance.levelManager.GetSnap();
+		newPosition = new Vector3 (Mathf.Round (newPosition.x/step.x)*step.x, Mathf.Round (newPosition.y/step.y)*step.y, Mathf.Round (newPosition.z/step.z)*step.z);
 		ShapeAsset selectedShape = Game.Instance.board.selectedShape;
 		selectedShape.transform.localPosition = newPosition;
 		CheckCollision ();
@@ -189,12 +190,14 @@ public class ShapeMove : MonoBehaviour {
 			selOrder = !selOrder;
 			ShapeAsset sa = go.GetComponentInParent<ShapeAsset> ();
 			if (sa != null) {
+				Debug.Log (sa.gameObject.name);
 				Events.OnShapeSelected (sa);
 				Game.Instance.board.selectedShape = sa;
 				newRotation = sa.transform.localEulerAngles;
 				newPosition = sa.transform.localPosition;
 				lastRotation = sa.transform.localEulerAngles;
 				lastPosition = sa.transform.localPosition;
+				Events.CloseSubMenu ();
 				SetState (Board.ActionStates.DRAGGING);
 			}
 		}			

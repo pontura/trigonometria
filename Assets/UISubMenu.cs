@@ -15,11 +15,13 @@ public class UISubMenu : MonoBehaviour {
 		SetOff ();
 		Events.OnButtonClickd += OnButtonClickd;
 		Events.OnSliderValueChange += OnSliderValueChange;
+		Events.CloseSubMenu += SetOff;
 	}
 
 	void OnDestroy(){
 		Events.OnButtonClickd -= OnButtonClickd;
 		Events.OnSliderValueChange -= OnSliderValueChange;
+		Events.CloseSubMenu -= SetOff;
 	}
 
 	void OnSliderValueChange(UIScaleSlider uiSlider){

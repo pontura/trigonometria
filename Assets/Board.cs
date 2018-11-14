@@ -59,7 +59,9 @@ public class Board : MonoBehaviour {
 			selectedShape.transform.localEulerAngles = new Vector3 (0f, Random.Range (0, 3) * 90, 0f);
 			selectedShape.transform.localPosition = Game.Instance.shapeMove.GetEmptySpace ();		
 			NewShapeAdded (true);
-			Game.Instance.integrationManager.count.text = "" + (Game.Instance.integrationManager.answer - all.Count);
+			float c = Game.Instance.integrationManager.answer - all.Count;
+			c = c < 0f ? 0f : c;
+			Game.Instance.integrationManager.count.text = "" + c;
 		}
 	}
 	void SelectNewShape(int id)
