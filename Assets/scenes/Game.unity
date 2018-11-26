@@ -9088,7 +9088,7 @@ MonoBehaviour:
     levelSubShape: {fileID: 0}
     medidasLevelSubShape: {x: 0, y: 0, z: 0}
     snapStep: {x: 0.25, y: 0.25, z: 0.25}
-  currentLevel: 2
+  currentLevel: 1
 --- !u!1 &2009834622
 GameObject:
   m_ObjectHideFlags: 0

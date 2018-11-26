@@ -114,10 +114,8 @@ public class Board : MonoBehaviour {
 		Destroy (selectedShape.gameObject);
 
 		foreach (ShapeAsset.ChildData ch in childs) {
-			Debug.Log (ch.child.transform.position+" : "+ch.position);
-			ch.child.transform.position = ch.child.transform.position + ch.position;
-			Debug.Log (ch.child.transform.position);
-			//ch.child.transform.localEulerAngles = ch.rotation;
+			ch.child.transform.position = ch.child.transform.position + (ch.child.transform.rotation*ch.position);
+			ch.child.transform.eulerAngles = ch.child.transform.eulerAngles + ch.rotation;
 			AddNewShape (ch.id, ch.child.transform.localPosition, ch.child.transform.localEulerAngles);
 		}
 		foreach (ShapeAsset.ChildData t in childs)

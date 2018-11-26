@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class ShapeMove : MonoBehaviour {
 
@@ -22,8 +23,6 @@ public class ShapeMove : MonoBehaviour {
 	int empty_id;
 	int empty_size = 3;
 	int empty_offset = -2;
-
-	bool selOrder;
 
 	// Use this for initialization
 	void Start () {
@@ -182,14 +181,14 @@ public class ShapeMove : MonoBehaviour {
 	}
 
 	void SelectShape(RaycastHit[] hits){
+
+		Array.Sort(hits,delegate(RaycastHit hit1, RaycastHit hit2){
+			return hit1.distance.CompareTo(hit2.distance);			
+		});
+
+		
 		for (int i = 0; i < hits.Length; i++) {
-			GameObject go;
-			if (selOrder) {
-				go = hits [hits.Length-1-i].transform.gameObject;
-			} else {
-				go = hits [i].transform.gameObject;
-			}
-			selOrder = !selOrder;
+			GameObject go = hits [i].transform.gameObject;
 			ShapeAsset sa = go.GetComponentInParent<ShapeAsset> ();
 			if (sa != null) {
 				Debug.Log (sa.gameObject.name);
@@ -201,6 +200,7 @@ public class ShapeMove : MonoBehaviour {
 				lastPosition = sa.transform.localPosition;
 				Events.CloseSubMenu ();
 				SetState (Board.ActionStates.DRAGGING);
+				break;
 			}
 		}			
 	}
