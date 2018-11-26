@@ -98,24 +98,30 @@ public class Board : MonoBehaviour {
 	}
 
 	public void BreakShape(){
-		List<GameObject> childs = new List<GameObject>();
+		List<ShapeAsset.ChildData> childs = new List<ShapeAsset.ChildData>();
 		int childID = 0;
 		foreach (ShapeAsset.ChildData childData in selectedShape.childs) {
-			if(mechanicState==MechanicStates.INTEGRAR)
+			if (mechanicState == MechanicStates.INTEGRAR) {
 				childData.child.transform.SetParent (compararContainer);
-			else if(mechanicState==MechanicStates.COMBINAR)
+				childData.child.transform.position = selectedShape.transform.position;
+				childData.child.transform.rotation = selectedShape.transform.rotation;
+			}else if(mechanicState==MechanicStates.COMBINAR)
 				childData.child.transform.SetParent (combinarContainer);
-			childs.Add (childData.child);
-			childID = childData.id;
+			childs.Add (childData);
+			//childID = childData.id;
 		}
 		all.Remove (selectedShape);
 		Destroy (selectedShape.gameObject);
 
-		foreach (GameObject go in childs) {
-			AddNewShape (childID, go.transform.localPosition, go.transform.localEulerAngles);
+		foreach (ShapeAsset.ChildData ch in childs) {
+			Debug.Log (ch.child.transform.position+" : "+ch.position);
+			ch.child.transform.position = ch.child.transform.position + ch.position;
+			Debug.Log (ch.child.transform.position);
+			//ch.child.transform.localEulerAngles = ch.rotation;
+			AddNewShape (ch.id, ch.child.transform.localPosition, ch.child.transform.localEulerAngles);
 		}
-		foreach (GameObject t in childs)
-			Destroy (t);
+		foreach (ShapeAsset.ChildData t in childs)
+			Destroy (t.child);
 	}
 
 	void CheckIntegration(){

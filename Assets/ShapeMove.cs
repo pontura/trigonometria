@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ShapeMove : MonoBehaviour {
 
+	public Vector3 defaultSpace;
+
 	Vector3 lastRotation;
 	Vector3 lastPosition;
 
@@ -41,7 +43,7 @@ public class ShapeMove : MonoBehaviour {
 	public Vector3 GetEmptySpace()
 	{
 		if (Game.Instance.board.all.Count == 1)
-			return Vector3.zero;
+			return defaultSpace;
 		ShapeAsset selectedShape = Game.Instance.board.selectedShape;
 		int z = (int) Mathf.Floor (empty_id / empty_size);
 		z = (int)selectedShape.size.z * z;
