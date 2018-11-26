@@ -60,7 +60,7 @@ public class Board : MonoBehaviour {
 			selectedShape.transform.localPosition = Game.Instance.shapeMove.GetEmptySpace ();		
 			NewShapeAdded (true);
 			float c = Game.Instance.integrationManager.answer - all.Count;
-			c = c < 0f ? 0f : c;
+			//c = c < 0f ? 0f : c;
 			Game.Instance.integrationManager.count.text = "" + c;
 		}
 	}
@@ -85,6 +85,12 @@ public class Board : MonoBehaviour {
 	}
 
 	public void DestroyShape(){
+
+		float c = float.Parse (Game.Instance.integrationManager.count.text);
+		c += selectedShape.val;
+		c = c > Game.Instance.integrationManager.answer ? Game.Instance.integrationManager.answer : c;
+		Game.Instance.integrationManager.count.text = "" + c;
+
 		all.Remove (selectedShape);
 		Destroy (selectedShape.gameObject);
 		Invoke ("CheckIntegration", 0.5f);

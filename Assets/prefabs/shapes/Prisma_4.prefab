@@ -244,6 +244,7 @@ MonoBehaviour:
   size: {x: 0.5, y: 0.5, z: 0.5}
   childs: []
   color: {r: 0, g: 0, b: 0, a: 0}
+  val: 1
 --- !u!114 &114778612132534162
 MonoBehaviour:
   m_ObjectHideFlags: 1

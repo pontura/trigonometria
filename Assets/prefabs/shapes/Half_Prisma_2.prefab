@@ -257,3 +257,4 @@ MonoBehaviour:
   size: {x: 1.5, y: 6, z: 16}
   childs: []
   color: {r: 0, g: 0, b: 0, a: 0}
+  val: 0.5
