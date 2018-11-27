@@ -35,15 +35,19 @@ public class IntegrationManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		integrationState = IntegrationStates.question;
-		targetMaterial = targetShape.GetComponent<Renderer> ().material;
-		originalTargetColor = targetMaterial.color;
-		SetStateScreen ();
+		Init ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	public void Init(){
+		integrationState = IntegrationStates.question;
+		targetMaterial = targetShape.GetComponent<Renderer> ().material;
+		originalTargetColor = targetMaterial.color;
+		SetStateScreen ();
 	}
 
 	public void CheckIntegration(){

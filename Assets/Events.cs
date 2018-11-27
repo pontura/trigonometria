@@ -17,4 +17,6 @@ public static class Events {
 	public static System.Action<UIScaleSlider> OnSliderValueChange = delegate { };
 
 	public static System.Action CloseSubMenu = delegate { };
+
+	public static System.Action Reiniciar = delegate { };
 }

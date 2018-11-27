@@ -16,6 +16,8 @@ public class UIMenu : MonoBehaviour {
 	void Start () {
 		SetOff ();
 		submenu = GetComponent<UISubMenu> ();
+		Game.Instance.board.mechanicState = Board.MechanicStates.INTEGRAR;
+		OnMechanicChange ();
 		Events.OnButtonClickd += OnButtonClickd;
 		Events.OnMessageShow += ShowMessage;
 	}
@@ -128,6 +130,15 @@ public class UIMenu : MonoBehaviour {
 			RedimenMenu.SetActive (true);
 			submenu.SetOff ();
 			Events.OnMechanicChange (Board.MechanicStates.REDIMENSIONAR);
+			break;
+		case 3:
+			ShapesMenu.SetActive (true);
+			RedimenMenu.SetActive (false);
+			submenu.SetOff ();
+			Events.Reiniciar ();
+			Events.OnMechanicChange (Board.MechanicStates.INTEGRAR);
+			mechanicsSelector.value = 0;
+			Game.Instance.integrationManager.Init ();
 			break;
 		}
 	}

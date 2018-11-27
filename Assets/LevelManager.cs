@@ -30,11 +30,22 @@ public class LevelManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		ResetShapeManager ();
+		Events.Reiniciar += Reiniciar;
+	}
+
+	void OnDestroy(){
+		Events.Reiniciar -= Reiniciar;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	void Reiniciar(){
+		LevelShapeShow (false);
+		currentLevel = 0;
+		ResetShapeManager ();
 	}
 
 	public string GetConsignaComparar(){
