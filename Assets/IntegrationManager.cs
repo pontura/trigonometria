@@ -35,6 +35,8 @@ public class IntegrationManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		targetMaterial = targetShape.GetComponent<Renderer> ().material;
+		originalTargetColor = targetMaterial.color;
 		Init ();
 	}
 	
@@ -43,10 +45,9 @@ public class IntegrationManager : MonoBehaviour {
 		
 	}
 
-	public void Init(){
+	public void Init(){		
 		integrationState = IntegrationStates.question;
-		targetMaterial = targetShape.GetComponent<Renderer> ().material;
-		originalTargetColor = targetMaterial.color;
+		targetMaterial.color = originalTargetColor;
 		SetStateScreen ();
 	}
 
@@ -152,10 +153,12 @@ public class IntegrationManager : MonoBehaviour {
 
 	void SetStateScreen(){
 		if (integrationState == IntegrationStates.question) {
+			Events.OnMessageShow ("");
 			SetConsigna ();
 			question.SetActive(true);
 			integrating.SetActive(false);
 			confirmation.SetActive(false);
+			Debug.Log ("ACA");
 		} else if (integrationState == IntegrationStates.integrating) {
 			question.SetActive(false);
 			integrating.SetActive(true);
@@ -167,10 +170,12 @@ public class IntegrationManager : MonoBehaviour {
 		}
 	}
 
-	void SetConfirmation(){		
-		integrationState = IntegrationStates.confirmation;
-		Events.CloseSubMenu ();
-		SetStateScreen ();
+	void SetConfirmation(){	
+		if (integrationState == IntegrationStates.integrating) {
+			integrationState = IntegrationStates.confirmation;
+			Events.CloseSubMenu ();
+			SetStateScreen ();
+		}
 	}
 
 	void SetConsigna(){		
@@ -180,6 +185,7 @@ public class IntegrationManager : MonoBehaviour {
 	}
 
 	public void SetAnswer(string s){
+		count.color = Color.white;
 		count.text = respuesta.text;
 		answer = float.Parse(respuesta.text);
 		Debug.Log(respuesta.text);

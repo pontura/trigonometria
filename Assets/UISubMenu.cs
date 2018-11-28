@@ -58,18 +58,22 @@ public class UISubMenu : MonoBehaviour {
 			break;
 
 		case UIButton.types.ROTATE_UP:
+			if(Game.Instance.board.selectedShape!=null)
 			Game.Instance.shapeMove.Rotate (90);
 			rotateButton.Select();
 			break;
 		case UIButton.types.ROTATE_DOWN:
+			if(Game.Instance.board.selectedShape!=null)
 			Game.Instance.shapeMove.Rotate (-90);
 			rotateButton.Select();
 			break;
 		case UIButton.types.MOVE_Y_UP:
+			if(Game.Instance.board.selectedShape!=null)
 			Game.Instance.shapeMove.Move (Quaternion.Euler(Game.Instance.board.CameraRot)*new Vector3 (0, 1, 0));
 			translateButton.Select();
 			break;
 		case UIButton.types.MOVE_Y_DOWN:
+			if(Game.Instance.board.selectedShape!=null)
 			Game.Instance.shapeMove.Move (Quaternion.Euler(Game.Instance.board.CameraRot)*new Vector3 (0, -1, 0));
 			translateButton.Select();
 			break;

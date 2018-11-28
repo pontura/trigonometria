@@ -34,9 +34,15 @@ public class UIButton : MonoBehaviour  {
 	}
 	void OnShapeSelected(ShapeAsset sa)
 	{
-		foreach (Image t in toColirize)
-			t.color = sa.color;
+		foreach (Image t in toColirize) {
+			if(Game.Instance.board.selectedShape.childs.Count==0 && type == types.BREAK)
+				t.color = Color.grey;
+			else
+				t.color = sa.color;
+		}
+
 	}
+
 	void TaskOnClick()
 	{
 		Events.OnButtonClickd (this);

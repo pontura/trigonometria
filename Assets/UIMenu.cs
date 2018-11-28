@@ -72,11 +72,13 @@ public class UIMenu : MonoBehaviour {
 	}
 	public void Break()
 	{
+		if(Game.Instance.board.selectedShape!=null)
 		Game.Instance.board.BreakShape ();
 		submenu.SetOff();
 	}
 	public void DestroyShape()
 	{
+		if(Game.Instance.board.selectedShape!=null)
 		Game.Instance.board.DestroyShape ();
 		submenu.SetOff();
 	}

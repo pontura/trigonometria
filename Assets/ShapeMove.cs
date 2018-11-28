@@ -20,9 +20,10 @@ public class ShapeMove : MonoBehaviour {
 	bool unmoved;
 	bool offsetDone;
 
-	int empty_id;
-	int empty_size = 3;
-	int empty_offset = -2;
+	int empty_id_x;
+	int empty_id_z;
+	int empty_size = 15;
+	int empty_offset = -1;
 
 	// Use this for initialization
 	void Start () {
@@ -39,19 +40,28 @@ public class ShapeMove : MonoBehaviour {
 		unmoved = isUnmoved;
 	}
 
+	public void ResetEmpty(){
+		empty_id_x = 0;
+		empty_id_z = 0;
+	}
+
 	public Vector3 GetEmptySpace()
 	{
 		if (Game.Instance.board.all.Count == 1)
 			return defaultSpace;
 		ShapeAsset selectedShape = Game.Instance.board.selectedShape;
-		int z = (int) Mathf.Floor (empty_id / empty_size);
-		z = (int)selectedShape.size.z * z;
-		z += empty_offset;
-		int x =empty_id % empty_size;
-		x = (int)selectedShape.size.x * x;
-		x += empty_offset;
-		empty_id = (empty_id + 1) > (empty_size * empty_size) - 1 ? 0 : empty_id + 1;
-		return new Vector3 (x, 0, z);
+		float z = empty_id_z * selectedShape.size.z;
+		empty_id_z++;
+		if (z > empty_size) {
+			empty_id_z = 0;
+			empty_id_x++;
+		}
+		float x =empty_id_x * selectedShape.size.x;
+		if (x > empty_size) {
+			empty_id_x = 0;
+		}
+		Debug.Log (empty_id_x+" : "+empty_id_z);
+		return new Vector3 (defaultSpace.x+x, 0,defaultSpace.z+z);
 	}
 
 	public void Rotate(int qty)

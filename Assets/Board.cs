@@ -36,11 +36,18 @@ public class Board : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Events.OnMechanicChange += OnMechanicsChange;
+		Events.Reiniciar += Reiniciar;
 	}
 
 	void OnDestroy(){
 		Events.OnMechanicChange -= OnMechanicsChange;
+		Events.Reiniciar -= Reiniciar;
 	}
+
+	void Reiniciar(){
+		Clear ();
+	}
+
 	public void AddNewShape(int id, Vector3 pos, Vector3 rot)
 	{		
 		SelectNewShape (id);
@@ -50,19 +57,23 @@ public class Board : MonoBehaviour {
 	}
 	public void AddNewShape(int id)
 	{
+		
 		if (mechanicState == MechanicStates.INTEGRAR) {
 			if (all.Count >= Game.Instance.integrationManager.answer) {
 				Game.Instance.integrationManager.count.color = Color.red;	
 				return;
 			}
-			SelectNewShape (id);
-			selectedShape.transform.localEulerAngles = new Vector3 (0f, Random.Range (0, 3) * 90, 0f);
-			selectedShape.transform.localPosition = Game.Instance.shapeMove.GetEmptySpace ();		
-			NewShapeAdded (true);
-			float c = Game.Instance.integrationManager.answer - all.Count;
-			//c = c < 0f ? 0f : c;
-			Game.Instance.integrationManager.count.text = "" + c;
 		}
+		SelectNewShape (id);
+		//selectedShape.transform.localEulerAngles = new Vector3 (0f, Random.Range (0, 3) * 90, 0f);
+		//selectedShape.transform.localPosition = Game.Instance.shapeMove.GetEmptySpace ();	
+		Game.Instance.shapeMove.ResetEmpty();
+		selectedShape.transform.localPosition = Game.Instance.shapeMove.defaultSpace;		
+		NewShapeAdded (true);			
+
+		float c = Game.Instance.integrationManager.answer - all.Count;
+		//c = c < 0f ? 0f : c;
+		Game.Instance.integrationManager.count.text = "" + c;
 	}
 	void SelectNewShape(int id)
 	{
@@ -90,6 +101,8 @@ public class Board : MonoBehaviour {
 		c += selectedShape.val;
 		c = c > Game.Instance.integrationManager.answer ? Game.Instance.integrationManager.answer : c;
 		Game.Instance.integrationManager.count.text = "" + c;
+		Game.Instance.integrationManager.count.color = Color.white;	
+
 
 		all.Remove (selectedShape);
 		Destroy (selectedShape.gameObject);
@@ -105,27 +118,29 @@ public class Board : MonoBehaviour {
 
 	public void BreakShape(){
 		List<ShapeAsset.ChildData> childs = new List<ShapeAsset.ChildData>();
-		int childID = 0;
-		foreach (ShapeAsset.ChildData childData in selectedShape.childs) {
-			if (mechanicState == MechanicStates.INTEGRAR) {
-				childData.child.transform.SetParent (compararContainer);
-				childData.child.transform.position = selectedShape.transform.position;
-				childData.child.transform.rotation = selectedShape.transform.rotation;
-			}else if(mechanicState==MechanicStates.COMBINAR)
-				childData.child.transform.SetParent (combinarContainer);
-			childs.Add (childData);
-			//childID = childData.id;
-		}
-		all.Remove (selectedShape);
-		Destroy (selectedShape.gameObject);
+		if (selectedShape.childs.Count > 0) {
+			int childID = 0;
+			foreach (ShapeAsset.ChildData childData in selectedShape.childs) {
+				if (mechanicState == MechanicStates.INTEGRAR) {
+					childData.child.transform.SetParent (compararContainer);
+					childData.child.transform.position = selectedShape.transform.position;
+					childData.child.transform.rotation = selectedShape.transform.rotation;
+				} else if (mechanicState == MechanicStates.COMBINAR)
+					childData.child.transform.SetParent (combinarContainer);
+				childs.Add (childData);
+				//childID = childData.id;
+			}
+			all.Remove (selectedShape);
+			Destroy (selectedShape.gameObject);
 
-		foreach (ShapeAsset.ChildData ch in childs) {
-			ch.child.transform.position = ch.child.transform.position + (ch.child.transform.rotation*ch.position);
-			ch.child.transform.eulerAngles = ch.child.transform.eulerAngles + ch.rotation;
-			AddNewShape (ch.id, ch.child.transform.localPosition, ch.child.transform.localEulerAngles);
+			foreach (ShapeAsset.ChildData ch in childs) {
+				ch.child.transform.position = ch.child.transform.position + (ch.child.transform.rotation * ch.position);
+				ch.child.transform.eulerAngles = ch.child.transform.eulerAngles + ch.rotation;
+				AddNewShape (ch.id, ch.child.transform.localPosition, ch.child.transform.localEulerAngles);
+			}
+			foreach (ShapeAsset.ChildData t in childs)
+				Destroy (t.child);
 		}
-		foreach (ShapeAsset.ChildData t in childs)
-			Destroy (t.child);
 	}
 
 	void CheckIntegration(){
