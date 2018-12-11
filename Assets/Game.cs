@@ -11,6 +11,7 @@ public class Game : MonoBehaviour {
 	public InputManager inputManager;
 	public IntegrationManager integrationManager;
 	public RedimensionManager redimensionManager;
+	public CombinarManager combinarManager;
 	public LevelManager levelManager;
 
 	public static Game Instance {
@@ -28,6 +29,7 @@ public class Game : MonoBehaviour {
 		shapeMove = GetComponent<ShapeMove> ();
 		integrationManager = GetComponent<IntegrationManager> ();
 		redimensionManager = GetComponent<RedimensionManager> ();
+		combinarManager = GetComponent<CombinarManager> ();
 		levelManager = GetComponent<LevelManager> ();
 
 	}

@@ -57,7 +57,7 @@ public class IntegrationManager : MonoBehaviour {
 		float totalvol = 0f;
 		float insideVol = 0f;
 		//bool areInside = true;
-		foreach (ShapeAsset sa in Game.Instance.board.all) {
+		foreach (ShapeAsset sa in Game.Instance.board.compararAll) {
 			bool isInside = sa.gameObject.GetComponent<AddShapeColliders> ().GetVertexInside ();
 			if (sa.childs.Count > 0) {
 				foreach (ShapeAsset.ChildData chd in sa.childs) {
@@ -117,25 +117,27 @@ public class IntegrationManager : MonoBehaviour {
 		if (total_Vol_done && total_Vol_inside) {
 			Game.Instance.board.Clear ();
 			integration_done = true;
+			Game.Instance.combinarManager.Reset ();
 			float h, s, v;
 			Color.RGBToHSV (originalTargetColor, out h, out s, out v);
 			targetMaterial.color = Color.HSVToRGB (h, 1f, v);
 			Events.OnMessageShow ("Completaste el cuerpo principal");
 			Invoke ("SetConfirmation", 5);
 		} else if (total_Vol_inside) {
-			if (Game.Instance.board.all.Count >= answer) {
+			if (Game.Instance.board.compararAll.Count >= answer) {
 				count.color = Color.red;
 				targetMaterial.color = new Color (255, 0, 0, originalTargetColor.a);
-				Events.OnMessageShow ("No tienes más cuerpos para agregar");
+				Events.OnMessageShow ("Ya usaste todos los cuerpos disponibles");
 				Invoke ("SetConfirmation", 5);
 			}
 		} else if (vol_inside) {
 			if (answer > Game.Instance.levelManager.GetCorrectAnswer ()) {
 				integration_done = true;
+				Game.Instance.combinarManager.Reset ();
 				float h, s, v;
 				Color.RGBToHSV (originalTargetColor, out h, out s, out v);
 				targetMaterial.color = Color.HSVToRGB (h, 1f, v);
-				foreach (ShapeAsset sa in Game.Instance.board.all) {
+				foreach (ShapeAsset sa in Game.Instance.board.compararAll) {
 					MeshRenderer[] mrs = sa.gameObject.GetComponentsInChildren<MeshRenderer> ();
 					foreach (MeshRenderer mr in mrs) {
 						mr.material.color = Color.red;
@@ -158,7 +160,6 @@ public class IntegrationManager : MonoBehaviour {
 			question.SetActive(true);
 			integrating.SetActive(false);
 			confirmation.SetActive(false);
-			Debug.Log ("ACA");
 		} else if (integrationState == IntegrationStates.integrating) {
 			question.SetActive(false);
 			integrating.SetActive(true);

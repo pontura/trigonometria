@@ -84,4 +84,8 @@ public class LevelManager : MonoBehaviour {
 	public Vector3 GetSnap(){
 		return ejercicios [currentLevel].snapStep;
 	}
+
+	public Level GetLevel(){
+		return ejercicios [currentLevel];
+	}
 }

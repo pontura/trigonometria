@@ -11,7 +11,8 @@ public class Board : MonoBehaviour {
 	public GameObject combinarCanvas;
 	public Transform redimenContainer;
 	public GameObject redimenCanvas;
-	public List<ShapeAsset> all;
+	public List<ShapeAsset> compararAll;
+	public List<ShapeAsset> combinarAll;
 
 	[HideInInspector]
 	public Vector3 CameraRot;
@@ -59,7 +60,7 @@ public class Board : MonoBehaviour {
 	{
 		
 		if (mechanicState == MechanicStates.INTEGRAR) {
-			if (all.Count >= Game.Instance.integrationManager.answer) {
+			if (compararAll.Count >= Game.Instance.integrationManager.answer) {
 				Game.Instance.integrationManager.count.color = Color.red;	
 				return;
 			}
@@ -71,7 +72,7 @@ public class Board : MonoBehaviour {
 		selectedShape.transform.localPosition = Game.Instance.shapeMove.defaultSpace;		
 		NewShapeAdded (true);			
 
-		float c = Game.Instance.integrationManager.answer - all.Count;
+		float c = Game.Instance.integrationManager.answer - compararAll.Count;
 		//c = c < 0f ? 0f : c;
 		Game.Instance.integrationManager.count.text = "" + c;
 	}
@@ -80,14 +81,20 @@ public class Board : MonoBehaviour {
 		ShapesData shapeData = Game.Instance.shapesManager.GetByID (id);
 		ShapeAsset shapeAsset = Instantiate(shapeData.asset);
 
-		if(mechanicState==MechanicStates.INTEGRAR)
+		if (mechanicState == MechanicStates.INTEGRAR) {
 			shapeAsset.transform.SetParent (compararContainer);
-		else if(mechanicState==MechanicStates.COMBINAR)
+			shapeAsset.transform.localScale = Vector3.one;
+			shapeAsset.SetColor(Game.Instance.shapesManager.GetFreeColor (compararAll));
+			compararAll.Add (shapeAsset);
+		} else if (mechanicState == MechanicStates.COMBINAR) {
 			shapeAsset.transform.SetParent (combinarContainer);
-		shapeAsset.transform.localScale = Vector3.one;
-		shapeAsset.SetColor(Game.Instance.shapesManager.GetFreeColor (all));
+			shapeAsset.transform.localScale = Vector3.one;
+			shapeAsset.SetColor(Game.Instance.shapesManager.GetFreeColor (combinarAll));
+			combinarAll.Add (shapeAsset);
+		}
 
-		all.Add (shapeAsset);
+
+
 		selectedShape = shapeAsset;
 	}
 	void NewShapeAdded(bool isUnmoved){
@@ -96,24 +103,40 @@ public class Board : MonoBehaviour {
 	}
 
 	public void DestroyShape(){
+		if (mechanicState == MechanicStates.INTEGRAR) {
+			float c = float.Parse (Game.Instance.integrationManager.count.text);
+			c += selectedShape.val;
+			c = c > Game.Instance.integrationManager.answer ? Game.Instance.integrationManager.answer : c;
+			Game.Instance.integrationManager.count.text = "" + c;
+			Game.Instance.integrationManager.count.color = Color.white;	
 
-		float c = float.Parse (Game.Instance.integrationManager.count.text);
-		c += selectedShape.val;
-		c = c > Game.Instance.integrationManager.answer ? Game.Instance.integrationManager.answer : c;
-		Game.Instance.integrationManager.count.text = "" + c;
-		Game.Instance.integrationManager.count.color = Color.white;	
-
-
-		all.Remove (selectedShape);
-		Destroy (selectedShape.gameObject);
-		Invoke ("CheckIntegration", 0.5f);
+			compararAll.Remove (selectedShape);
+			Destroy (selectedShape.gameObject);
+			Invoke ("CheckIntegration", 0.5f);
+		} else if (mechanicState == MechanicStates.COMBINAR) {
+			combinarAll.Remove (selectedShape);
+			Destroy (selectedShape.gameObject);
+		}
 	}
 
 	public void Clear(){
-		foreach (ShapeAsset sa in all) {			
-			Destroy (sa.gameObject);
+		if (mechanicState == MechanicStates.INTEGRAR) {
+			foreach (ShapeAsset sa in compararAll) {			
+				Destroy (sa.gameObject);
+			}
+			compararAll.Clear ();
+
+			foreach (ShapeAsset sa in combinarAll) {			
+				Destroy (sa.gameObject);
+			}
+			combinarAll.Clear ();
+
+		} else if (mechanicState == MechanicStates.COMBINAR) {
+			foreach (ShapeAsset sa in combinarAll) {			
+				Destroy (sa.gameObject);
+			}
+			combinarAll.Clear ();
 		}
-		all.Clear ();
 	}
 
 	public void BreakShape(){
@@ -125,13 +148,21 @@ public class Board : MonoBehaviour {
 					childData.child.transform.SetParent (compararContainer);
 					childData.child.transform.position = selectedShape.transform.position;
 					childData.child.transform.rotation = selectedShape.transform.rotation;
-				} else if (mechanicState == MechanicStates.COMBINAR)
+				} else if (mechanicState == MechanicStates.COMBINAR) {
 					childData.child.transform.SetParent (combinarContainer);
+					childData.child.transform.position = selectedShape.transform.position;
+					childData.child.transform.rotation = selectedShape.transform.rotation;
+				}
 				childs.Add (childData);
 				//childID = childData.id;
 			}
-			all.Remove (selectedShape);
-			Destroy (selectedShape.gameObject);
+			if (mechanicState == MechanicStates.INTEGRAR) {
+				compararAll.Remove (selectedShape);
+				Destroy (selectedShape.gameObject);
+			} else if (mechanicState == MechanicStates.COMBINAR) {
+				combinarAll.Remove (selectedShape);
+				Destroy (selectedShape.gameObject);
+			}
 
 			foreach (ShapeAsset.ChildData ch in childs) {
 				ch.child.transform.position = ch.child.transform.position + (ch.child.transform.rotation * ch.position);
@@ -171,5 +202,7 @@ public class Board : MonoBehaviour {
 			redimenContainer.gameObject.SetActive (true);
 			redimenCanvas.SetActive (true);
 		}
+
+		Events.OnShapeSelected (null);
 	}
 }

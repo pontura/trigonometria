@@ -47,7 +47,7 @@ public class ShapeMove : MonoBehaviour {
 
 	public Vector3 GetEmptySpace()
 	{
-		if (Game.Instance.board.all.Count == 1)
+		if (Game.Instance.board.compararAll.Count == 1)
 			return defaultSpace;
 		ShapeAsset selectedShape = Game.Instance.board.selectedShape;
 		float z = empty_id_z * selectedShape.size.z;
