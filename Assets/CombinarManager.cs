@@ -30,22 +30,18 @@ public class CombinarManager : MonoBehaviour {
 		tries = 0;
 		combinando.SetActive (false);
 		question.SetActive (true);
-		retry.SetActive (false);
+		//retry.SetActive (false);
 		LevelManager.Level l = Game.Instance.levelManager.GetLevel ();
 		medidas.text = "El cuerpo transparente mide " + l.medidasTarget.x + "x" + l.medidasTarget.y + "x" + l.medidasTarget.z + " cm y el otro mide " +
 		l.medidasLevelShape.x + "x" + l.medidasLevelShape.y + "x" + l.medidasLevelShape.z+" cm";
 	}
 
-	void Retry(){
+	void Retry(){		
+		combinando.SetActive (false);
+		question.SetActive (true);
+		//retry.SetActive (true);
+		input.text = "";
 		tries++;
-		if (tries < 3) {
-			combinando.SetActive (false);
-			question.SetActive (true);
-			retry.SetActive (true);
-			input.text = "";
-		} else {
-			Reset ();
-		}
 	}
 
 	public void SetAnswer(string s){
@@ -95,7 +91,7 @@ public class CombinarManager : MonoBehaviour {
 
 		Debug.Log (targetVol + " = " + totalvol + " = "+insideVol) ;
 
-		totalvol += targetVol;
+		//totalvol += targetVol;
 
 		totalvol *= 1000;
 
@@ -103,10 +99,14 @@ public class CombinarManager : MonoBehaviour {
 			question.SetActive (false);
 			Events.OnMessageShow ("Ese es el volumen de la escultura");
 			Invoke ("Reset", 5);
-		} else {
+		} else {			
 			question.SetActive (false);
-			Events.OnMessageShow ("Ese no es el volumen de la escultura");
-			Invoke ("Retry", 5);
+			if (tries < 2) {
+				Events.OnMessageShow ("Volvé a intentarlo");
+				Invoke ("Retry", 5);
+			} else {
+				Reset ();
+			}
 		}
 
 
@@ -117,6 +117,6 @@ public class CombinarManager : MonoBehaviour {
 		Game.Instance.board.Clear ();
 		combinando.SetActive (true);
 		question.SetActive (false);
-		retry.SetActive (false);
+		//retry.SetActive (false);
 	}
 }
