@@ -6280,7 +6280,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 245, y: -40.5}
+  m_AnchoredPosition: {x: 221, y: -40.5}
   m_SizeDelta: {x: 110, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &741272164
@@ -14362,7 +14362,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 145, y: -40.5}
+  m_AnchoredPosition: {x: 130, y: -40.5}
   m_SizeDelta: {x: 110, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1959551625
@@ -14667,7 +14667,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\xBFCu\xE1l es el volumen de la escultura que armaste teniendo en cuenta
-    que el cuerpo principal mide 30x60x80?"
+    que el cuerpo principal mide 30x60x80 cm?"
 --- !u!222 &1997307354
 CanvasRenderer:
   m_ObjectHideFlags: 0
