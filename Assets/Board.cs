@@ -78,24 +78,29 @@ public class Board : MonoBehaviour {
 	}
 	void SelectNewShape(int id)
 	{
-		ShapesData shapeData = Game.Instance.shapesManager.GetByID (id);
-		ShapeAsset shapeAsset = Instantiate(shapeData.asset);
+		
 
 		if (mechanicState == MechanicStates.INTEGRAR) {
+			ShapesData shapeData = Game.Instance.shapesManager.GetByID (id);
+			ShapeAsset shapeAsset = Instantiate(shapeData.asset);
 			shapeAsset.transform.SetParent (compararContainer);
 			shapeAsset.transform.localScale = Vector3.one;
 			shapeAsset.SetColor(Game.Instance.shapesManager.GetFreeColor (compararAll));
 			compararAll.Add (shapeAsset);
+			selectedShape = shapeAsset;
 		} else if (mechanicState == MechanicStates.COMBINAR) {
+			ShapesData shapeData = Game.Instance.shapesManager.GetCombinarByID (id);
+			ShapeAsset shapeAsset = Instantiate(shapeData.asset);
 			shapeAsset.transform.SetParent (combinarContainer);
 			shapeAsset.transform.localScale = Vector3.one;
-			shapeAsset.SetColor(Game.Instance.shapesManager.GetFreeColor (combinarAll));
+			shapeAsset.SetColor(Color.white);
 			combinarAll.Add (shapeAsset);
+			selectedShape = shapeAsset;
 		}
 
 
 
-		selectedShape = shapeAsset;
+
 	}
 	void NewShapeAdded(bool isUnmoved){
 		Game.Instance.shapeMove.SetNewShape (selectedShape.transform.localPosition, selectedShape.transform.localEulerAngles, isUnmoved);

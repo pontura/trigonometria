@@ -7,9 +7,19 @@ public class ShapesManager : MonoBehaviour {
 	public List<Color> colors;
 	public List<ShapesData> all;
 
+	public List<ShapesData> combinar;
+
 	public ShapesData GetByID(int id)
 	{
 		foreach (ShapesData data in all)
+			if (data.id == id)
+				return data;
+		return null;
+	}
+
+	public ShapesData GetCombinarByID(int id)
+	{
+		foreach (ShapesData data in combinar)
 			if (data.id == id)
 				return data;
 		return null;

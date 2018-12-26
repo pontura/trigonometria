@@ -9,9 +9,11 @@ public class CombinarManager : MonoBehaviour {
 	public GameObject combinando;
 	public GameObject retry;
 
-	public Text medidas;
+	//public Text medidas;
 
 	public InputField input;
+
+	public Vector3 step;
 
 	int tries;
 
@@ -31,9 +33,9 @@ public class CombinarManager : MonoBehaviour {
 		combinando.SetActive (false);
 		question.SetActive (true);
 		//retry.SetActive (false);
-		LevelManager.Level l = Game.Instance.levelManager.GetLevel ();
+		/*LevelManager.Level l = Game.Instance.levelManager.GetLevel ();
 		medidas.text = "El cuerpo transparente mide " + l.medidasTarget.x + "x" + l.medidasTarget.y + "x" + l.medidasTarget.z + " cm y el otro mide " +
-		l.medidasLevelShape.x + "x" + l.medidasLevelShape.y + "x" + l.medidasLevelShape.z+" cm";
+		l.medidasLevelShape.x + "x" + l.medidasLevelShape.y + "x" + l.medidasLevelShape.z+" cm";*/
 	}
 
 	void Retry(){		
@@ -91,7 +93,7 @@ public class CombinarManager : MonoBehaviour {
 
 		Debug.Log (targetVol + " = " + totalvol + " = "+insideVol) ;
 
-		//totalvol += targetVol;
+		totalvol += targetVol;
 
 		totalvol *= 1000;
 

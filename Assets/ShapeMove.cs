@@ -170,6 +170,8 @@ public class ShapeMove : MonoBehaviour {
 
 	void Snap(){
 		Vector3 step = Game.Instance.levelManager.GetSnap();
+		if (Game.Instance.board.mechanicState == Board.MechanicStates.COMBINAR)
+			step = Game.Instance.combinarManager.step;
 		newPosition = new Vector3 (Mathf.Round (newPosition.x/step.x)*step.x, Mathf.Round (newPosition.y/step.y)*step.y, Mathf.Round (newPosition.z/step.z)*step.z);
 		ShapeAsset selectedShape = Game.Instance.board.selectedShape;
 		selectedShape.transform.localPosition = newPosition;
